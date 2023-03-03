@@ -1,0 +1,8 @@
+.App {
+  width : 100vw;
+  height: 100vh;
+
+  display           : grid;
+  grid-template-rows: 50px 1fr;
+  column-gap        : 10px;
+}

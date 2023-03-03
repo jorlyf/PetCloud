@@ -1,0 +1,34 @@
+.AuthForm {
+  margin    : auto;
+  margin-top: 5%;
+  width     : max-content;
+  height    : max-content;
+
+  padding         : 25px;
+  background-color: bisque;
+
+  h1 {
+    margin: auto;
+    width : max-content;
+  }
+
+  .Inputs {
+    display       : flex;
+    margin-top    : 15px;
+    flex-direction: column;
+    row-gap       : 15px;
+  }
+
+  .Submit {
+    margin    : auto;
+    margin-top: 20px;
+    display   : flex;
+    column-gap: 20px;
+
+    a {
+      margin-left: auto;
+      color      : blue;
+      cursor     : pointer;
+    }
+  }
+}

@@ -5,6 +5,20 @@
     "module": "es6",
     "jsx": "react",
     "noImplicitAny": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@public/*": ["public/*"],
+      "@http/*": ["src/http/*"],
+      "@redux/*": ["src/redux/*"],
+      "@hooks/*": [ "src/hooks/*"],
+      "@services/*": ["src/services/*"],
+      "@pages/*": ["src/pages/*"],
+      "@modals/*": ["src/modals/*"],   
+      "@components/*": ["src/components/*"],
+      "@entities/*": ["src/entities/*"],
+      "@helpers/*": ["src/helpers/*"]
+    }
   }
 }
