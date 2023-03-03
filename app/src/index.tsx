@@ -6,6 +6,7 @@ import store from "@redux/store";
 import App from "./App";
 
 import "./index.scss";
+import "./colorDefinition.scss";
 
 const element = document.getElementById("root");
 if (!element) {

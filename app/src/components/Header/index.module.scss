@@ -5,7 +5,28 @@
   display              : grid;
   grid-template-columns: 1fr 100px;
 
-  background-color: whitesmoke;
+  background-color: var(--app-color);
+  box-sizing      : content-box;
+  border-bottom   : 2px solid var(--dark-blue-color);
+  z-index         : 100;
+
+  .Logo {
+    display    : flex;
+    margin-left: 50px;
+
+    h1 {
+      margin    : 0;
+      align-self: center;
+      width     : max-content;
+    }
+
+    img {
+      height     : 45px;
+      object-fit : contain;
+      align-self : center;
+      margin-left: 10px;
+    }
+  }
 
   .Profile {
     width : 100%;
@@ -16,8 +37,6 @@
     display   : flex;
     box-sizing: border-box;
 
-    background-color: azure;
-
     .Avatar {
       margin: auto 0;
       height: 90%;
@@ -25,7 +44,7 @@
       img {
         max-width    : 100%;
         max-height   : 100%;
-        border       : 2px solid red;
+        border       : 2px solid var(--dark-blue-color);
         border-radius: 5px;
         box-sizing   : border-box;
       }

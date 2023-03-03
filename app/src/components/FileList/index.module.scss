@@ -1,0 +1,24 @@
+.FileList {
+  display: grid;
+  row-gap: 20px;
+
+  grid-template-columns: repeat(auto-fill, 180px);
+  column-gap           : 0px;
+
+  .Item {
+    display         : flex;
+    flex-direction  : column;
+    margin          : 10px 20px;
+    height          : 80px;
+    background-color: var(--cloud-logo-color);
+    box-shadow      : -2px 4px 2px rgba(0, 0, 0, 0.2);
+
+    .Name {
+      display     : block;
+      margin-top  : auto;
+      margin-left : 5px;
+      margin-right: 5px;
+      overflow    : hidden;
+    }
+  }
+}

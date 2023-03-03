@@ -1,0 +1,13 @@
+.FolderHierarchy {
+  header {
+    display    : flex;
+    align-items: center;
+
+    .BackButton {
+      margin: 5px;
+      width : 32px;
+      height: 32px;
+      cursor: pointer;
+    }
+  }
+}
