@@ -7,26 +7,20 @@ import styles from "./index.module.scss";
 
 const HomeFileArea: React.FC = () => {
   const {
-    openedFolder,
-    isOpenContextMenu,
-    contextMenuPosition,
-    handleOpenContextMenu,
-    handleBackgroundClick
+    openedFolder
   } = useHomeFileArea();
 
   if (!openedFolder) {
     return (
-      <></>
+      <div></div>
     )
   }
 
   return (
     <>
-      <div className={styles.HomeFileArea} onClick={handleBackgroundClick} onContextMenu={handleOpenContextMenu}>
+      <div className={styles.HomeFileArea}>
         <FileList folder={openedFolder} />
       </div>
-
-      {isOpenContextMenu && <FileAreaContextMenu position={contextMenuPosition} />}
     </>
   )
 }

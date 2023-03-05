@@ -1,11 +1,11 @@
 import * as React from "react";
 import useFolderHierarchy from "./useFolderHierarchy";
+import { backToParentFolder } from "@redux/slices/file";
+import useAppDispatch from "@hooks/useAppDispatch";
 import Folder from "@components/Folder";
 import OpenedFolderInfo from "@components/OpenedFolderInfo";
 
 import styles from "./index.module.scss";
-import useAppDispatch from "@hooks/useAppDispatch";
-import { backToParentFolder } from "@redux/slices/file";
 
 const FolderHierarchy: React.FC = () => {
   const dispatch = useAppDispatch();
