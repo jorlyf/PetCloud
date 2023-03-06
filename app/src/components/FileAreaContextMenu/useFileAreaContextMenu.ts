@@ -1,6 +1,6 @@
-import { setIsOpenModal } from "@redux/slices/createFolder";
+import { setIsOpenModal as setIsOpenCreateFolderModal } from "@redux/slices/createFolder";
+import { setIsOpenModal as setIsOpenCreateFileModal } from "@redux/slices/createFile";
 import useAppDispatch from "@hooks/useAppDispatch";
-import useOpenedFolder from "@hooks/useOpenedFolder";
 
 interface IUseFileAreaContextMenuProps {
   handleClose: () => void;
@@ -9,14 +9,12 @@ interface IUseFileAreaContextMenuProps {
 const useFileAreaContextMenu = ({ handleClose }: IUseFileAreaContextMenuProps) => {
   const dispatch = useAppDispatch();
 
-  const openedFolder = useOpenedFolder();
-
   const handleCreateFile = () => {
+    dispatch(setIsOpenCreateFileModal(true));
     handleClose();
   }
   const handleCreateFolder = () => {
-    dispatch(setIsOpenModal(true));
-
+    dispatch(setIsOpenCreateFolderModal(true));
     handleClose();
   }
 

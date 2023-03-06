@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import FolderModel from "@entities/file/FolderModel";
 import Vector2 from "@entities/common/Vector2";
+import FileModel from "@entities/file/FileModel";
 
 export const findFolderByPath = (root: FolderModel, path: string): FolderModel | null => {
   if (root == null) return null;
@@ -49,6 +50,10 @@ const fileSlice = createSlice({
     openFolder: (state, action: PayloadAction<FolderModel>) => {
       state.openedFolderPath = action.payload.path;
     },
+    addChildFile: (state, action: PayloadAction<FileModel>) => {
+      const openedFolder = findFolderByPath(state.rootFolder, state.openedFolderPath);
+      openedFolder.childFiles.push(action.payload);
+    },
     addChildFolder: (state, action: PayloadAction<FolderModel>) => {
       const openedFolder = findFolderByPath(state.rootFolder, state.openedFolderPath);
       openedFolder.childFolders.push(action.payload);
@@ -91,6 +96,7 @@ const fileSlice = createSlice({
 export const {
   setRootFolder,
   openFolder,
+  addChildFile,
   addChildFolder,
   removeChildFolder,
   backToParentFolder,

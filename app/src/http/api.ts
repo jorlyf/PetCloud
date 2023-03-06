@@ -28,9 +28,11 @@ const $api = axios.create({
   baseURL: BASE_URL
 });
 
-$api.interceptors.request.use(config => {
-  config.headers!.Authorization = "Bearer " + LocalStorageService.getToken() || "";
-  return config;
-});
+export const setupApiToken = (token: string | null) => {
+  $api.interceptors.request.use(config => {
+    config.headers!.Authorization = token ? `Bearer ${token}` : "";
+    return config;
+  });
+}
 
 export default $api;
