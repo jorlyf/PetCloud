@@ -2,7 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import FolderModel from "@entities/file/FolderModel";
 import Vector2 from "@entities/common/Vector2";
 
-const findFolderByPath = (root: FolderModel, path: string): FolderModel | null => {
+export const findFolderByPath = (root: FolderModel, path: string): FolderModel | null => {
+  if (root == null) return null;
   if (root.path === path) return root;
   for (let i = 0; i < root.childFolders.length; i++) {
     const folder = root.childFolders[i];
@@ -14,7 +15,7 @@ const findFolderByPath = (root: FolderModel, path: string): FolderModel | null =
 }
 
 interface IFileState {
-  openedFolder: FolderModel | null;
+  openedFolderPath: string | null;
   rootFolder: FolderModel | null;
 
   isOpenFileAreaContextMenu: boolean;
@@ -26,7 +27,7 @@ interface IFileState {
 }
 
 const initialState: IFileState = {
-  openedFolder: null,
+  openedFolderPath: null,
   rootFolder: null,
 
   isOpenFileAreaContextMenu: false,
@@ -43,21 +44,24 @@ const fileSlice = createSlice({
   reducers: {
     setRootFolder: (state, action: PayloadAction<FolderModel>) => {
       state.rootFolder = action.payload;
-      state.openedFolder = state.rootFolder;
+      state.openedFolderPath = state.rootFolder.path;
     },
     openFolder: (state, action: PayloadAction<FolderModel>) => {
-      state.openedFolder = action.payload;
+      state.openedFolderPath = action.payload.path;
     },
     addChildFolder: (state, action: PayloadAction<FolderModel>) => {
-      state.openedFolder.childFolders.push(action.payload);
+      const openedFolder = findFolderByPath(state.rootFolder, state.openedFolderPath);
+      openedFolder.childFolders.push(action.payload);
     },
     removeChildFolder: (state, action: PayloadAction<FolderModel>) => {
-      state.openedFolder.childFolders = state.openedFolder.childFolders.filter(f => f !== action.payload);
+      const openedFolder = findFolderByPath(state.rootFolder, state.openedFolderPath);
+      openedFolder.childFolders = openedFolder.childFolders.filter(f => f !== action.payload);
     },
     backToParentFolder: (state) => {
-      if (state.openedFolder.path === state.rootFolder.path) return;
-      const folder = findFolderByPath(state.rootFolder, state.openedFolder.parentPath);
-      state.openedFolder = folder;
+      const openedFolder = findFolderByPath(state.rootFolder, state.openedFolderPath);
+      if (openedFolder.path === state.rootFolder.path) return;
+      const folder = findFolderByPath(state.rootFolder, openedFolder.parentPath);
+      state.openedFolderPath = folder.path;
     },
     openFileAreaContextMenu: (state, action: PayloadAction<Vector2>) => {
       state.isOpenFileAreaContextMenu = true;

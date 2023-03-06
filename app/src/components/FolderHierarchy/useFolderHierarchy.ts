@@ -1,8 +1,8 @@
 import * as React from "react";
 import { setRootFolder } from "@redux/slices/file";
 import FolderModel from "@entities/file/FolderModel";
-import useAppSelector from "@hooks/useAppSelector";
 import useAppDispatch from "@hooks/useAppDispatch";
+import useOpenedFolder from "@hooks/useOpenedFolder";
 
 const rootFolder: FolderModel = {
   name: "root",
@@ -67,7 +67,7 @@ const rootFolder: FolderModel = {
 const useFolderHierarchy = () => {
   const dispatch = useAppDispatch();
 
-  const openedFolder = useAppSelector(state => state.file.openedFolder);
+  const openedFolder = useOpenedFolder();
 
   React.useEffect(() => { // test folder data
     dispatch(setRootFolder(rootFolder));

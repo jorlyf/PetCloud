@@ -2,11 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import auth from "./slices/auth";
 import file from "./slices/file";
+import createFolder from "./slices/createFolder"
 
 const store = configureStore({
   reducer: {
     auth,
-    file
+    file,
+    createFolder
   }
 });
 

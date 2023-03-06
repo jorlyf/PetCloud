@@ -1,11 +1,10 @@
-import * as React from "react";
-import useAppSelector from "@hooks/useAppSelector";
 import useAppDispatch from "@hooks/useAppDispatch";
+import useOpenedFolder from "@hooks/useOpenedFolder";
 
 const useHomeFileArea = () => {
   const dispatch = useAppDispatch();
 
-  const openedFolder = useAppSelector(state => state.file.openedFolder);
+  const openedFolder = useOpenedFolder();
 
   return {
     openedFolder
