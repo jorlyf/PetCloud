@@ -2,3 +2,5 @@
 api.sln
 /api/bin
 /api/obj
+/api/appsettings.json
+/api/appsettings.Development.json
