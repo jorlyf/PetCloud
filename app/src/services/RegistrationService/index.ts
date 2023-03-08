@@ -4,7 +4,7 @@ import LoginDataDTO from "@entities/auth/dtos/LoginDataDTO";
 
 export default class RegistrationService {
   static async register(registrationData: LoginDataDTO): Promise<LoginResponseDTO> {
-    const { data } = await $api.post<LoginResponseDTO>("/Registration", registrationData);
+    const { data } = await $api.post<LoginResponseDTO>("/Authorization/Register", registrationData);
     return data;
   }
 }

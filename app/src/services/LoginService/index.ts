@@ -4,13 +4,12 @@ import LoginResponseDTO from "@entities/auth/dtos/LoginResponseDTO";
 
 export default class LoginService {
   static async login(loginData: LoginDataDTO): Promise<LoginResponseDTO> {
-    const { data } = await $api.post<LoginResponseDTO>("/Login", loginData);
+    const { data } = await $api.post<LoginResponseDTO>("/Authorization/Login", loginData);
     return data;
   }
 
-  static async tokenLogin(token: string): Promise<LoginResponseDTO> {
+  static async tokenLogin(token: string): Promise<void> {
     setupApiToken(token);
-    const { data } = await $api.post<LoginResponseDTO>("/Login/TokenLogin");
-    return data;
+    return await $api.post("/Authorization/TokenLogin");
   }
 }

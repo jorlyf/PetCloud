@@ -4,7 +4,6 @@ import RegistrationService from "@services/RegistrationService";
 import LocalStorageService from "@services/LocalStorageService";
 import LoginDataDTO from "@entities/auth/dtos/LoginDataDTO";
 import LoginResponseDTO from "@entities/auth/dtos/LoginResponseDTO";
-import { setupApiToken } from "@http/api";
 
 export const login = createAsyncThunk<LoginResponseDTO, LoginDataDTO>(
   "auth/login",
@@ -17,7 +16,8 @@ export const login = createAsyncThunk<LoginResponseDTO, LoginDataDTO>(
 export const tokenLogin = createAsyncThunk<LoginResponseDTO, string>(
   "auth/login",
   async (token) => {
-    const loginResponse = await LoginService.tokenLogin(token);
+    await LoginService.tokenLogin(token);
+    const loginResponse: LoginResponseDTO = { token };
     return loginResponse;
   }
 );
@@ -68,21 +68,17 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isLogging = false;
-        state.isAuthorized = true;
         state.wasInitLoginAttempt = true;
+        state.isAuthorized = true;
 
         state.token = action.payload.token;
-        LocalStorageService.setToken(action.payload.token);
-        setupApiToken(state.token);
       })
       .addCase(login.rejected, (state) => {
         state.isLogging = false;
-        state.isAuthorized = false;
         state.wasInitLoginAttempt = true;
+        state.isAuthorized = false;
 
         state.token = null;
-        LocalStorageService.clearToken();
-        setupApiToken(null);
       })
   }
 });

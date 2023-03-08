@@ -1,5 +1,6 @@
 ﻿using api.Entities.User;
 using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 
 namespace api.DbContexts
 {
@@ -10,6 +11,7 @@ namespace api.DbContexts
 		public DataContext(DbContextOptions<DataContext> options) : base(options)
 		{
 			Database.EnsureCreated();
+			Batteries.Init();
 		}
 	}
 }

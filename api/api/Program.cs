@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
-	options.UseSqlite($"Data Source={Environment.CurrentDirectory}\\PetCloud.db");
+	options.UseSqlite($"Data Source={Environment.CurrentDirectory}/PetCloud.db");
 	if (builder.Environment.IsDevelopment())
 	{
 		options.LogTo(Console.WriteLine, LogLevel.Warning);
@@ -35,13 +35,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 });
 
 #region Custom services
-builder.Services.AddSingleton<AuthorizationService>();
 builder.Services.AddSingleton<HashService>();
 builder.Services.AddSingleton<JwtService>();
 
 builder.Services.AddScoped<UnitOfWork>();
 
-
+builder.Services.AddScoped<AuthorizationService>();
 #endregion
 
 builder.Services.AddCors(options =>

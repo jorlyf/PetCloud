@@ -6,7 +6,7 @@ import NotFound from "@pages/NotFound";
 
 export enum RoutingURL {
   home = "/",
-  auth = "/auth",
+  authorization = "/authorization",
   profile = "/profile"
 }
 
@@ -14,7 +14,7 @@ const Routing: React.FC = () => {
   return (
     <Routes>
       <Route element={<Home />} path="/" />
-      <Route element={<Auth />} path={RoutingURL.auth} />
+      <Route element={<Auth />} path={RoutingURL.authorization} />
       {/* <Route element={<Profile />} path="/profile" /> */}
       <Route element={<NotFound />} path="*" />
     </Routes>

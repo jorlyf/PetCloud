@@ -1,5 +1,5 @@
 ﻿using api.Entities.User;
-using api.Infrastructure.Exceptions.Auth;
+using api.Infrastructure.Exceptions.Authorization;
 using api.Repositories.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +28,7 @@ namespace api.Services.Authorization
 			string passwordHash = _hashService.GetHash(password);
 			if (user == null || user.PasswordHash != passwordHash)
 			{
-				throw new AuthException(AuthExceptionReason.IncorrectLoginData);
+				throw new AuthorizationException(AuthorizationExceptionReasonCode.IncorrectLoginData);
 			}
 
 			string token = _jwtService.GenerateToken(user);
@@ -39,7 +39,7 @@ namespace api.Services.Authorization
 		{
 			if (await IsUserLoginExist(login))
 			{
-				throw new AuthException(AuthExceptionReason.UserLoginExist);
+				throw new AuthorizationException(AuthorizationExceptionReasonCode.UserLoginExist);
 			}
 
 			string passwordHash = _hashService.GetHash(password);

@@ -19,6 +19,10 @@ const Auth: React.FC = () => {
     handleChangeMode
   } = useAuthPage();
 
+  if (!wasInitLoginAttempt) {
+    return <div></div>
+  }
+
   return (
     <div>
       <div className={styles.AuthForm}>

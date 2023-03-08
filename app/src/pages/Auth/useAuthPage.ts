@@ -33,14 +33,13 @@ const useAuthPage = () => {
   }
 
   const handleSubmitLogin = () => {
-    const loginData: LoginDataDTO = { login: loginInput, password: passwordInput }
-    dispatch(login(loginData));
-
+    dispatch(login({ login: loginInput, password: passwordInput }));
+    clearInputs();
   }
 
   const handleSubmitRegister = async () => {
-    const registrationData: LoginDataDTO = { login: loginInput, password: passwordInput }
-    dispatch(register(registrationData));
+    dispatch(register({ login: loginInput, password: passwordInput }));
+    clearInputs();
   }
 
   React.useEffect(() => {
