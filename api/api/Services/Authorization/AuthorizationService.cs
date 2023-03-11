@@ -1,6 +1,7 @@
 ﻿using api.Entities.User;
 using api.Infrastructure.Exceptions.Authorization;
 using api.Repositories.UnitOfWork;
+using api.Services.FileHierarchy;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Services.Authorization
@@ -10,12 +11,18 @@ namespace api.Services.Authorization
 		private readonly UnitOfWork _UoW;
 		private readonly HashService _hashService;
 		private readonly JwtService _jwtService;
+		private readonly FileHierarchyCreationService _fileHierarchyCreationService;
 
-		public AuthorizationService(UnitOfWork uow, HashService hashService, JwtService jwtService)
+		public AuthorizationService(
+			UnitOfWork uow,
+			HashService hashService,
+			JwtService jwtService,
+			FileHierarchyCreationService fileHierarchyCreationService)
 		{
 			_UoW = uow;
 			_hashService = hashService;
 			_jwtService = jwtService;
+			_fileHierarchyCreationService = fileHierarchyCreationService;
 		}
 
 		public async Task<string> LoginAsync(string login, string password)
@@ -50,6 +57,7 @@ namespace api.Services.Authorization
 			};
 
 			await _UoW.UserRepository.AddAsync(user);
+			await _fileHierarchyCreationService.CreateRootFolder(user);
 			await _UoW.UserRepository.SaveAsync();
 
 			string token = _jwtService.GenerateToken(user);

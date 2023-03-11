@@ -1,6 +1,7 @@
 using api.DbContexts;
 using api.Repositories.UnitOfWork;
 using api.Services.Authorization;
+using api.Services.FileHierarchy;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -41,6 +42,7 @@ builder.Services.AddSingleton<JwtService>();
 builder.Services.AddScoped<UnitOfWork>();
 
 builder.Services.AddScoped<AuthorizationService>();
+builder.Services.AddScoped<FileHierarchyCreationService>();
 #endregion
 
 builder.Services.AddCors(options =>

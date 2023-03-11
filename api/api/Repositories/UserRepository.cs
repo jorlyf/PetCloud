@@ -11,12 +11,12 @@ namespace api.Repositories
 
 		public IQueryable<User> GetByLogin(string login)
 		{
-			return this.Set.Where(user => EF.Functions.Like(user.Login, login));
+			return Set.Where(user => EF.Functions.Like(user.Login, login));
 		}
 
 		public IQueryable<User> GetByLoginContains(string login)
 		{
-			return this.Set.Where(user => user.Login.ToLower().Contains(login.ToLower()));
+			return Set.Where(user => user.Login.ToLower().Contains(login.ToLower()));
 		}
 	}
 }

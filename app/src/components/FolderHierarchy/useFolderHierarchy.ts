@@ -5,63 +5,12 @@ import useAppDispatch from "@hooks/useAppDispatch";
 import useOpenedFolder from "@hooks/useOpenedFolder";
 
 const rootFolder: FolderModel = {
-  name: "root",
-  path: "root",
+  name: "Root",
+  path: "Root",
   isRoot: true,
   parentPath: null,
-  childFiles: [
-    {
-      name: "1.txt",
-      path: "root/1.txt",
-      parentPath: "root"
-    },
-    {
-      name: "2.txt",
-      path: "root/2.txt",
-      parentPath: "root"
-    },
-    {
-      name: "3.txt",
-      path: "root/3.txt",
-      parentPath: "root"
-    },
-    {
-      name: "4.txt",
-      path: "root/4.txt",
-      parentPath: "root"
-    },
-    {
-      name: "dddddddddddd.txt",
-      path: "root/dddddddddddd.txt",
-      parentPath: "root"
-    },
-    {
-      name: "5.txt",
-      path: "root/5.txt",
-      parentPath: "root"
-    }
-  ],
-  childFolders: [
-    {
-      name: "a",
-      path: "root/a",
-      isRoot: false,
-      parentPath: "root",
-      childFiles: [
-        {
-          name: "1.txt",
-          path: "root/1.txt",
-          parentPath: "root"
-        },
-        {
-          name: "2.txt",
-          path: "root/2.txt",
-          parentPath: "root"
-        }
-      ],
-      childFolders: []
-    }
-  ]
+  childFiles: [],
+  childFolders: []
 }
 
 const useFolderHierarchy = () => {
@@ -69,7 +18,7 @@ const useFolderHierarchy = () => {
 
   const openedFolder = useOpenedFolder();
 
-  React.useEffect(() => { // test folder data
+  React.useEffect(() => { // init empty root folder
     dispatch(setRootFolder(rootFolder));
   }, []);
 

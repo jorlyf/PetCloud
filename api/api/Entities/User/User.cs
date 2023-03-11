@@ -12,6 +12,8 @@ namespace api.Entities.User
 		public required string Login { get; set; }
 		[Required]
 		public required string PasswordHash { get; set; }
+		[Required]
+		public Guid RootFolderId { get; set; }
 		public string? AvatarUrl { get; set; }
 	}
 }
