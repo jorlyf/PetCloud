@@ -6,7 +6,6 @@
 		public required Guid? ParentId { get; set; }
 		public required bool IsRoot { get; set; }
 		public required string Name { get; set; }
-		public required string Path { get; set; }
 		public required IEnumerable<FolderDTO> ChildFolders { get; set; }
 		public required IEnumerable<FileDTO> Files { get; set; }
 	}

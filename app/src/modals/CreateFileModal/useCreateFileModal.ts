@@ -18,13 +18,12 @@ const useCreateFileModal = () => {
     dispatch(clear());
   }
   const handleCreateFile = () => {
-    const file: FileModel = {
-      name: fileName,
-      path: openedFolder.path + "/" + fileName,
-      parentPath: openedFolder.path
-    }
+    // const file: FileModel = {
+    //   folderId: openedFolder.id,
+    //   name: fileName,
+    // }
 
-    dispatch(addChildFile(file));
+    // dispatch(addChildFile(file));
     dispatch(clear());
   }
 

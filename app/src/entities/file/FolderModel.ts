@@ -1,10 +1,11 @@
 import File from "@entities/file/FileModel";
 
 export default interface FolderModel {
+  id: string;
+  parentId: string | null;
+  isRoot: boolean;
   name: string;
   path: string;
-  isRoot: boolean;
   childFolders: FolderModel[];
-  childFiles: File[];
-  parentPath: string | null;
+  files: File[];
 }

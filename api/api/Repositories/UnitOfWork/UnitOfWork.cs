@@ -8,6 +8,7 @@ namespace api.Repositories.UnitOfWork
 
 		public UserRepository UserRepository { get; }
 		public FolderRepository FolderRepository { get; }
+		public FileRepository FileRepository { get; }
 
 		public UnitOfWork(DataContext context)
 		{
@@ -15,6 +16,7 @@ namespace api.Repositories.UnitOfWork
 
 			UserRepository = new UserRepository(_context);
 			FolderRepository = new FolderRepository(_context);
+			FileRepository = new FileRepository(_context);
 		}
 
 		public void Dispose()

@@ -8,10 +8,6 @@ namespace api.Repositories
 	{
 		public FolderRepository(DataContext context) : base(context) { }
 
-		public IQueryable<Folder> GetByPath(Guid userId, string path)
-		{
-			return Set.Where(folder => folder.UserId == userId && folder.Path == path);
-		}
 		public IQueryable<Folder> GetByParentId(Guid userId, Guid parentId) 
 		{
 			return Set.Where(folder => folder.UserId == userId && folder.ParentId == parentId);

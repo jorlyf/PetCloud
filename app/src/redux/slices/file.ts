@@ -1,22 +1,31 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import FolderRetrievalService from "@services/FolderRetrievalService/FolderRetrievalService";
 import FolderModel from "@entities/file/FolderModel";
 import Vector2 from "@entities/common/Vector2";
 import FileModel from "@entities/file/FileModel";
 
-export const findFolderByPath = (root: FolderModel, path: string): FolderModel | null => {
-  if (root == null) return null;
-  if (root.path === path) return root;
+export const loadRootFolder = createAsyncThunk<FolderModel>(
+  "file/loadRootFolder",
+  async () => {
+    const rootFolder = await FolderRetrievalService.retrieveRoot();
+    return rootFolder;
+  }
+);
+
+export const findFolderById = (root: FolderModel, id: string): FolderModel | null => {
+  if (root === null) return null;
+  if (root.id === id) return root;
   for (let i = 0; i < root.childFolders.length; i++) {
     const folder = root.childFolders[i];
-    if (path === folder.path) return folder;
-    const result = findFolderByPath(folder, path);
+    if (id === folder.id) return folder;
+    const result = findFolderById(folder, id);
     if (result !== null) return result;
   }
   return null;
 }
 
 interface IFileState {
-  openedFolderPath: string | null;
+  openedFolderId: string | null;
   rootFolder: FolderModel | null;
 
   isOpenFileAreaContextMenu: boolean;
@@ -28,7 +37,7 @@ interface IFileState {
 }
 
 const initialState: IFileState = {
-  openedFolderPath: null,
+  openedFolderId: null,
   rootFolder: null,
 
   isOpenFileAreaContextMenu: false,
@@ -45,28 +54,28 @@ const fileSlice = createSlice({
   reducers: {
     setRootFolder: (state, action: PayloadAction<FolderModel>) => {
       state.rootFolder = action.payload;
-      state.openedFolderPath = state.rootFolder.path;
+      state.openedFolderId = state.rootFolder.id;
     },
     openFolder: (state, action: PayloadAction<FolderModel>) => {
-      state.openedFolderPath = action.payload.path;
+      state.openedFolderId = action.payload.id;
     },
     addChildFile: (state, action: PayloadAction<FileModel>) => {
-      const openedFolder = findFolderByPath(state.rootFolder, state.openedFolderPath);
-      openedFolder.childFiles.push(action.payload);
+      const openedFolder = findFolderById(state.rootFolder, state.openedFolderId);
+      openedFolder.files.push(action.payload);
     },
     addChildFolder: (state, action: PayloadAction<FolderModel>) => {
-      const openedFolder = findFolderByPath(state.rootFolder, state.openedFolderPath);
+      const openedFolder = findFolderById(state.rootFolder, state.openedFolderId);
       openedFolder.childFolders.push(action.payload);
     },
     removeChildFolder: (state, action: PayloadAction<FolderModel>) => {
-      const openedFolder = findFolderByPath(state.rootFolder, state.openedFolderPath);
+      const openedFolder = findFolderById(state.rootFolder, state.openedFolderId);
       openedFolder.childFolders = openedFolder.childFolders.filter(f => f !== action.payload);
     },
     backToParentFolder: (state) => {
-      const openedFolder = findFolderByPath(state.rootFolder, state.openedFolderPath);
-      if (openedFolder.path === state.rootFolder.path) return;
-      const folder = findFolderByPath(state.rootFolder, openedFolder.parentPath);
-      state.openedFolderPath = folder.path;
+      const openedFolder = findFolderById(state.rootFolder, state.openedFolderId);
+      if (openedFolder.id === state.rootFolder.id) return;
+      const folder = findFolderById(state.rootFolder, openedFolder.parentId);
+      state.openedFolderId = folder.id;
     },
     openFileAreaContextMenu: (state, action: PayloadAction<Vector2>) => {
       state.isOpenFileAreaContextMenu = true;
@@ -78,7 +87,7 @@ const fileSlice = createSlice({
       state.isOpenFileAreaContextMenu = false;
       state.fileAreaContextMenuPosition = null;
     },
-    openFileContextMenu: (state, action: PayloadAction<{filePath: string, position: Vector2}>) => {
+    openFileContextMenu: (state, action: PayloadAction<{ filePath: string, position: Vector2 }>) => {
       state.isOpenFileContextMenu = true;
       state.fileContextMenuPosition = action.payload.position;
       state.selectedFilePathContextMenu = action.payload.filePath;
@@ -90,7 +99,19 @@ const fileSlice = createSlice({
       state.fileContextMenuPosition = null;
       state.selectedFilePathContextMenu = null;
     }
-  }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(loadRootFolder.pending, (state) => {
+        
+      })
+      .addCase(loadRootFolder.fulfilled, (state, action) => {
+        fileSlice.caseReducers.setRootFolder(state, action);
+      })
+      .addCase(loadRootFolder.rejected, (state) => {
+        
+      })
+  },
 });
 
 export const {

@@ -1,16 +1,17 @@
 import * as React from "react";
-import { setRootFolder } from "@redux/slices/file";
+import { loadRootFolder, setRootFolder } from "@redux/slices/file";
 import FolderModel from "@entities/file/FolderModel";
 import useAppDispatch from "@hooks/useAppDispatch";
 import useOpenedFolder from "@hooks/useOpenedFolder";
 
 const rootFolder: FolderModel = {
+  id: "",
+  parentId: null,
   name: "Root",
   path: "Root",
   isRoot: true,
-  parentPath: null,
-  childFiles: [],
-  childFolders: []
+  childFolders: [],
+  files: []
 }
 
 const useFolderHierarchy = () => {
@@ -20,6 +21,7 @@ const useFolderHierarchy = () => {
 
   React.useEffect(() => { // init empty root folder
     dispatch(setRootFolder(rootFolder));
+    dispatch(loadRootFolder());
   }, []);
 
   return {

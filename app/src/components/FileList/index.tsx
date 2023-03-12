@@ -26,9 +26,9 @@ const FileList: React.FC<IFileListProps> = ({ folder }) => {
 
   return (
     <div ref={fileListDivRef} className={styles.FileList} onContextMenu={handleOpenFileAreaContextMenu}>
-      {folder.childFiles.map(f => {
+      {folder.files.map(f => {
         return (
-          <div key={f.path} className={styles.Item} onContextMenu={(e) => handleOpenFileContextMenu(e, f.path)}>
+          <div key={f.id} className={styles.Item} onContextMenu={(e) => handleOpenFileContextMenu(e, f.id)}>
             <span className={styles.Name}>{f.name}</span>
           </div>
         )

@@ -6,6 +6,5 @@
 		public required Guid FolderId { get; set; }
 		public required FileType Type { get; set; }
 		public required string Name { get; set; }
-		public required string Path { get; set; }
 	}
 }

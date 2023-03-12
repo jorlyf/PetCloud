@@ -20,14 +20,17 @@ namespace api.Services.FileHierarchy
 			User? user = await _UoW.UserRepository.GetById(userId).FirstOrDefaultAsync();
 			if (user == null) throw new NotImplementedException();
 
-			Folder? root = await _UoW.FolderRepository.GetById(user.RootFolderId).FirstOrDefaultAsync();
+			Folder? root = await _UoW.FolderRepository
+				.GetById(user.RootFolderId)
+				.Include(x => x.Files)
+				.FirstOrDefaultAsync();
 			if (root == null) throw new NotImplementedException();
 
 			IEnumerable<Folder> childs = await _UoW.FolderRepository.GetByParentId(userId, root.Id).ToListAsync();
 			FolderDTO dto = ProcessFolderDTO(root, childs);
 			return dto;
 		}
-		public async Task<FolderDTO> GetFolderDTOByPath(Guid userId, string path)
+		public async Task<FolderDTO> GetFolderDTOById(Guid userId, Guid folderId)
 		{
 			throw new NotImplementedException();
 		}
@@ -40,7 +43,6 @@ namespace api.Services.FileHierarchy
 				ParentId = model.ParentId,
 				IsRoot = model.IsRoot,
 				Name = model.Name,
-				Path = model.Path,
 				ChildFolders = childFolders.Select(x => ProcessFolderDTO(x, Enumerable.Empty<Folder>())),
 				Files = model.Files.Select(x => ProcessFileDTO(x))
 			};
@@ -52,8 +54,7 @@ namespace api.Services.FileHierarchy
 				Id = model.Id,
 				FolderId = model.FolderId,
 				Type = model.Type,
-				Name = model.Name,
-				Path = model.Path
+				Name = model.Name
 			};
 		}
 	}

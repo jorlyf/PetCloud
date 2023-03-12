@@ -16,15 +16,14 @@ const useCreateFolderModal = () => {
   }
 
   const handleCreateFolder = () => {
-    const folder: FolderModel = {
-      name: folderName,
-      path: openedFolder.path + `/${folderName}`,
-      isRoot: false,
-      parentPath: openedFolder.path,
-      childFolders: [],
-      childFiles: []
-    }
-    dispatch(addChildFolder(folder));
+    // const folder: FolderModel = {
+    //   id: "",
+    //   name: folderName,
+    //   isRoot: false,
+    //   childFolders: [],
+    //   files: []
+    // }
+    // dispatch(addChildFolder(folder));
     dispatch(clear());
   }
   const handleCloseModal = () => {

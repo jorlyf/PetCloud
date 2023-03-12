@@ -1,7 +1,13 @@
-import FolderModel from "@entities/file/FolderModel";
+export enum FileType {
+  undefined,
+  text,
+  picture,
+  video
+}
 
 export default interface FileModel {
+  id: string;
+  folderId: string;
+  type: FileType;
   name: string;
-  path: string;
-  parentPath: string | null;
 }

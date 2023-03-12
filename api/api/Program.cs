@@ -1,4 +1,6 @@
 using api.DbContexts;
+using api.Infrastructure.StartupActions;
+using api.Infrastructure.Utils;
 using api.Repositories.UnitOfWork;
 using api.Services.Authorization;
 using api.Services.FileHierarchy;
@@ -38,11 +40,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 #region Custom services
 builder.Services.AddSingleton<HashService>();
 builder.Services.AddSingleton<JwtService>();
+builder.Services.AddSingleton<FileCreator>();
 
 builder.Services.AddScoped<UnitOfWork>();
 
 builder.Services.AddScoped<AuthorizationService>();
 builder.Services.AddScoped<FileHierarchyCreationService>();
+builder.Services.AddScoped<FolderRetrievalService>();
 #endregion
 
 builder.Services.AddCors(options =>
@@ -64,6 +68,8 @@ builder.Services.AddCors(options =>
 });
 
 WebApplication app = builder.Build();
+
+InitFolderCreator.CreateUserDataFolder(AppDirectories.CloudData);
 
 if (app.Environment.IsDevelopment())
 {
