@@ -1,5 +1,4 @@
 import axios from "axios";
-import LocalStorageService from "@services/LocalStorageService";
 
 export enum NodeEnv {
   production = "production",

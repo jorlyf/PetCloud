@@ -4,5 +4,7 @@
 	{
 		public string Type { get; }
 		public int Code { get; }
+
+		public ApiErrorData GetData();
 	}
 }

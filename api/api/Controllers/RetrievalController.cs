@@ -29,9 +29,13 @@ namespace api.Controllers
 				FolderDTO dto = await _folderRetrievalService.GetRootFolderDTO(userId);
 				return Ok(dto);
 			}
+			catch (ApiExceptionBase ex)
+			{
+				return BadRequest(ex.GetData());
+			}
 			catch (Exception)
 			{
-				return BadRequest(new InternalException());
+				return BadRequest(new InternalException().GetData());
 			}
 		}
 	}

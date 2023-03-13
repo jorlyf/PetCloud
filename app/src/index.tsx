@@ -10,7 +10,7 @@ import "./colorDefinition.scss";
 
 const element = document.getElementById("root");
 if (!element) {
-  throw new Error("root element not found");
+  throw new Error("root element not found.");
 }
 
 const root = createRoot(element);

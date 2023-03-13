@@ -3,6 +3,7 @@ import { loadRootFolder, setRootFolder } from "@redux/slices/file";
 import FolderModel from "@entities/file/FolderModel";
 import useAppDispatch from "@hooks/useAppDispatch";
 import useOpenedFolder from "@hooks/useOpenedFolder";
+import useAppSelector from "@hooks/useAppSelector";
 
 const rootFolder: FolderModel = {
   id: "",
@@ -18,11 +19,15 @@ const useFolderHierarchy = () => {
   const dispatch = useAppDispatch();
 
   const openedFolder = useOpenedFolder();
+  const isAuthorized = useAppSelector(state => state.auth.isAuthorized);
 
   React.useEffect(() => { // init empty root folder
     dispatch(setRootFolder(rootFolder));
-    dispatch(loadRootFolder());
   }, []);
+
+  React.useEffect(() => {
+    if (isAuthorized) dispatch(loadRootFolder());
+  }, [isAuthorized]);
 
   return {
     openedFolder

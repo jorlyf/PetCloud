@@ -24,12 +24,14 @@ namespace api.Services.FileHierarchy
 
 			string fileNameOnDisk = GenerateFileName();
 
+			Folder rootFolder = await GetRootFolder(userId);
+
 			File file = new()
 			{
 				FolderId = folderId,
 				UserId = userId,
 				Name = fileName,
-				Path = $"{folder.Path}\\{fileNameOnDisk}",
+				Path = $"{rootFolder.Path}\\{fileNameOnDisk}",
 				Type = AnalyzeFileExtension(fileName)
 			};
 			await _UoW.FileRepository.AddAsync(file);
@@ -37,21 +39,26 @@ namespace api.Services.FileHierarchy
 
 			_fileCreator.CreateEmptyFile($"{AppDirectories.CloudData}\\{file.Path}");
 		}
-		public async Task CreateEmptyFolder(Guid userId, Guid parentId, string folderName)
+		public async Task<FolderDTO> CreateEmptyFolder(Guid userId, Guid parentId, string folderName)
 		{
 			Folder? parentFolder = await _UoW.FolderRepository.GetById(parentId).FirstOrDefaultAsync();
 			if (parentFolder == null) { throw new NotImplementedException(); }
+
+			Folder rootFolder = await GetRootFolder(userId);
 
 			Folder createdFolder = new()
 			{
 				ParentId = parentId,
 				UserId = userId,
 				Name = folderName,
-				Path = $"{parentFolder.Path}\\{GenerateFileName()}",
+				Path = $"{rootFolder.Path}\\{GenerateFileName()}",
 				Files = Enumerable.Empty<File>()
 			};
 			await _UoW.FolderRepository.AddAsync(createdFolder);
 			await _UoW.FolderRepository.SaveAsync();
+
+			FolderDTO dto = FolderDTO.GetDTO(createdFolder, Enumerable.Empty<Folder>());
+			return dto;
 		}
 		public async Task CreateRootFolder(User user)
 		{
@@ -73,7 +80,7 @@ namespace api.Services.FileHierarchy
 		}
 		private string GenerateFileName()
 		{
-			return new Guid().ToString();
+			return Guid.NewGuid().ToString();
 		}
 		private FileType AnalyzeFileExtension(string fileName)
 		{
@@ -93,6 +100,14 @@ namespace api.Services.FileHierarchy
 
 				default: return FileType.Undefined;
 			}
+		}
+		private async Task<Folder> GetRootFolder(Guid userId)
+		{
+			User? user = await _UoW.UserRepository.GetById(userId).FirstOrDefaultAsync();
+			if (user == null) throw new Exception("User doesn't exist.");
+			Folder? folder = await _UoW.FolderRepository.GetById(user.RootFolderId).FirstOrDefaultAsync();
+			if (folder == null) throw new Exception("Root folder doesn't exist.");
+			return folder;
 		}
 	}
 }

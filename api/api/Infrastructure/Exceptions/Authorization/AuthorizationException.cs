@@ -5,15 +5,12 @@
 		UserLoginExist,
 		IncorrectLoginData
 	}
-	public class AuthorizationException : Exception, IApiException
+	public class AuthorizationException : ApiExceptionBase
 	{
-		public string Type { get; }
-		public int Code { get; }
-
 		public AuthorizationException(AuthorizationExceptionReasonCode reason)
 		{
-			Code = (int)reason;
 			Type = "Authorization";
+			Code = (int)reason;
 		}
 	}
 }

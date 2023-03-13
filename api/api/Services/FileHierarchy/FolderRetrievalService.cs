@@ -27,35 +27,12 @@ namespace api.Services.FileHierarchy
 			if (root == null) throw new NotImplementedException();
 
 			IEnumerable<Folder> childs = await _UoW.FolderRepository.GetByParentId(userId, root.Id).ToListAsync();
-			FolderDTO dto = ProcessFolderDTO(root, childs);
+			FolderDTO dto = FolderDTO.GetDTO(root, childs);
 			return dto;
 		}
 		public async Task<FolderDTO> GetFolderDTOById(Guid userId, Guid folderId)
 		{
 			throw new NotImplementedException();
-		}
-
-		private FolderDTO ProcessFolderDTO(Folder model, IEnumerable<Folder> childFolders)
-		{
-			return new FolderDTO()
-			{
-				Id = model.Id,
-				ParentId = model.ParentId,
-				IsRoot = model.IsRoot,
-				Name = model.Name,
-				ChildFolders = childFolders.Select(x => ProcessFolderDTO(x, Enumerable.Empty<Folder>())),
-				Files = model.Files.Select(x => ProcessFileDTO(x))
-			};
-		}
-		private FileDTO ProcessFileDTO(File model)
-		{
-			return new FileDTO()
-			{
-				Id = model.Id,
-				FolderId = model.FolderId,
-				Type = model.Type,
-				Name = model.Name
-			};
 		}
 	}
 }

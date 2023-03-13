@@ -1,4 +1,5 @@
-﻿using api.Infrastructure.Exceptions;
+﻿using api.Entities.FileHierarchy;
+using api.Infrastructure.Exceptions;
 using api.Infrastructure.Utils;
 using api.Services.FileHierarchy;
 using Microsoft.AspNetCore.Authorization;
@@ -19,18 +20,22 @@ namespace api.Controllers
 		}
 
 		[HttpPost]
-		[Route("CreateFolder")]
-		public async Task<ActionResult> CreateFolder(Guid parentFolderId, string folderName)
+		[Route("CreateEmptyFolder")]
+		public async Task<ActionResult<FolderDTO>> CreateEmptyFolder(Guid parentFolderId, string folderName)
 		{
 			try
 			{
 				Guid userId = IdentityUtils.GetAuthorizedUserId(User);
-				await _fileHierarchyCreationService.CreateEmptyFolder(userId, parentFolderId, folderName);
-				return Ok();
+				FolderDTO dto = await _fileHierarchyCreationService.CreateEmptyFolder(userId, parentFolderId, folderName);
+				return Ok(dto);
+			}
+			catch (ApiExceptionBase ex)
+			{
+				return BadRequest(ex.GetData());
 			}
 			catch (Exception)
 			{
-				return BadRequest(new InternalException());
+				return BadRequest(new InternalException().GetData());
 			}
 		}
 	}

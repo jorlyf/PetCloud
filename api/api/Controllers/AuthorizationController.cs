@@ -27,13 +27,13 @@ namespace api.Controllers
 				LoginResponseDTO response = new LoginResponseDTO { Token = token };
 				return Ok(response);
 			}
-			catch (AuthorizationException ex)
+			catch (ApiExceptionBase ex)
 			{
-				return BadRequest(ex);
+				return BadRequest(ex.GetData());
 			}
 			catch (Exception)
 			{
-				return BadRequest(new InternalException());
+				return BadRequest(new InternalException().GetData());
 			}
 		}
 		[HttpPost]
@@ -52,7 +52,7 @@ namespace api.Controllers
 			}
 			catch (Exception)
 			{
-				return BadRequest(new InternalException());
+				return BadRequest(new InternalException().GetData());
 			}
 		}
 
@@ -67,7 +67,7 @@ namespace api.Controllers
 			}
 			catch (Exception)
 			{
-				return BadRequest(new InternalException());
+				return BadRequest(new InternalException().GetData());
 			}
 		}
 	}

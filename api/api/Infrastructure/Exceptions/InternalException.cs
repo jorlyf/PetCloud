@@ -1,9 +1,7 @@
 ﻿namespace api.Infrastructure.Exceptions
 {
-	public class InternalException : Exception, IApiException
+	public class InternalException : ApiExceptionBase
 	{
-		public string Type { get; }
-		public int Code { get; }
 		public InternalException()
 		{
 			Type = "Internal";

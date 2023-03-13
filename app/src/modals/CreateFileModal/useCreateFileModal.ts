@@ -1,9 +1,7 @@
 import { setFileName, clear } from "@redux/slices/createFile";
-import { addChildFile } from "@redux/slices/file";
 import useAppDispatch from "@hooks/useAppDispatch";
 import useAppSelector from "@hooks/useAppSelector";
 import useOpenedFolder from "@hooks/useOpenedFolder";
-import FileModel from "@entities/file/FileModel";
 
 const useCreateFileModal = () => {
   const dispatch = useAppDispatch();
