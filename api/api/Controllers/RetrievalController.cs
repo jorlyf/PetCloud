@@ -38,5 +38,25 @@ namespace api.Controllers
 				return BadRequest(new InternalException().GetData());
 			}
 		}
+
+		[HttpGet]
+		[Route("GetFolder")]
+		public async Task<ActionResult<FolderDTO>> GetFolder(Guid folderId)
+		{
+			try
+			{
+				Guid userId = IdentityUtils.GetAuthorizedUserId(User);
+				FolderDTO dto = await _folderRetrievalService.GetFolderDTOById(userId, folderId);
+				return Ok(dto);
+			}
+			catch (ApiExceptionBase ex)
+			{
+				return BadRequest(ex.GetData());
+			}
+			catch (Exception)
+			{
+				return BadRequest(new InternalException().GetData());
+			}
+		}
 	}
 }

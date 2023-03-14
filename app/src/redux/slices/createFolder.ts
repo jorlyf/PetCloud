@@ -2,8 +2,8 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import FileHierarchyCreationService from "@services/FileHierarchyCreationService/FileHierarchyCreationService";
 import FolderModel from "@entities/file/FolderModel";
 
-const submitFolderCreating = createAsyncThunk<FolderModel, { parentFolderId: string, folderName: string }>(
-  "createFolder/submitFolderCreating",
+export const submitFolderCreation = createAsyncThunk<FolderModel, { parentFolderId: string, folderName: string }>(
+  "createFolder/submitFolderCreation",
   async ({ parentFolderId, folderName }) => {
     return FileHierarchyCreationService.createEmptyFolder(parentFolderId, folderName);
   }
@@ -33,12 +33,7 @@ const createFolderSlice = createSlice({
       state.isOpenModal = false;
       state.folderName = "";
     }
-  },
-  extraReducers: (builder) =>
-    builder
-      .addCase(submitFolderCreating.fulfilled, (state, action) => {
-        
-      })
+  }
 });
 
 export const {

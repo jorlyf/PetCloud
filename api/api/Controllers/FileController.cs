@@ -38,5 +38,25 @@ namespace api.Controllers
 				return BadRequest(new InternalException().GetData());
 			}
 		}
+
+		[HttpPost]
+		[Route("CreateEmptyFile")]
+		public async Task<ActionResult<FileDTO>> CreateEmptyFile(Guid folderId, string fileName)
+		{
+			try
+			{
+				Guid userId = IdentityUtils.GetAuthorizedUserId(User);
+				FileDTO dto = await _fileHierarchyCreationService.CreateEmptyFile(userId, folderId, fileName);
+				return Ok(dto);
+			}
+			catch (ApiExceptionBase ex)
+			{
+				return BadRequest(ex.GetData());
+			}
+			catch (Exception)
+			{
+				return BadRequest(new InternalException().GetData());
+			}
+		}
 	}
 }

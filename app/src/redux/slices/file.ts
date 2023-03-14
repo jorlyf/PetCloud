@@ -3,12 +3,22 @@ import FolderRetrievalService from "@services/FolderRetrievalService/FolderRetri
 import FolderModel from "@entities/file/FolderModel";
 import Vector2 from "@entities/common/Vector2";
 import FileModel from "@entities/file/FileModel";
+import { submitFolderCreation } from "./createFolder";
+import { submitFileCreation } from "./createFile";
 
-export const loadRootFolder = createAsyncThunk<FolderModel>(
-  "file/loadRootFolder",
+export const retrieveRootFolder = createAsyncThunk<FolderModel>(
+  "file/retrieveRootFolder",
   async () => {
     const rootFolder = await FolderRetrievalService.retrieveRoot();
     return rootFolder;
+  }
+);
+
+export const retrieveFolder = createAsyncThunk<FolderModel, string>(
+  "file/retrieveFolder",
+  async (folderId) => {
+    const folder = await FolderRetrievalService.retrieveFolder(folderId);
+    return folder;
   }
 );
 
@@ -59,17 +69,17 @@ const fileSlice = createSlice({
     openFolder: (state, action: PayloadAction<FolderModel>) => {
       state.openedFolderId = action.payload.id;
     },
-    addChildFile: (state, action: PayloadAction<FileModel>) => {
-      const openedFolder = findFolderById(state.rootFolder, state.openedFolderId);
-      openedFolder.files.push(action.payload);
+    addChildFile: (state, action: PayloadAction<{ parentId: string, child: FileModel }>) => {
+      const parent = findFolderById(state.rootFolder, action.payload.parentId);
+      parent.files.push(action.payload.child);
     },
-    addChildFolder: (state, action: PayloadAction<FolderModel>) => {
-      const openedFolder = findFolderById(state.rootFolder, state.openedFolderId);
-      openedFolder.childFolders.push(action.payload);
+    addChildFolder: (state, action: PayloadAction<{ parentId: string, child: FolderModel }>) => {
+      const parent = findFolderById(state.rootFolder, action.payload.parentId);
+      parent.childFolders.push(action.payload.child);
     },
-    removeChildFolder: (state, action: PayloadAction<FolderModel>) => {
-      const openedFolder = findFolderById(state.rootFolder, state.openedFolderId);
-      openedFolder.childFolders = openedFolder.childFolders.filter(f => f !== action.payload);
+    removeChildFolder: (state, action: PayloadAction<{ parentId: string, child: FolderModel }>) => {
+      const parent = findFolderById(state.rootFolder, action.payload.parentId);
+      parent.childFolders = parent.childFolders.filter(f => f.id !== action.payload.child.id);
     },
     backToParentFolder: (state) => {
       const openedFolder = findFolderById(state.rootFolder, state.openedFolderId);
@@ -98,18 +108,57 @@ const fileSlice = createSlice({
       state.isOpenFileContextMenu = false;
       state.fileContextMenuPosition = null;
       state.selectedFilePathContextMenu = null;
+    },
+    updateFolder: (state, action: PayloadAction<FolderModel>) => {
+      const localFolder = findFolderById(state.rootFolder, action.payload.id);
+      if (!localFolder) {
+
+      } else {
+        localFolder.name = action.payload.name;
+
+        for (let i = 0; i < action.payload.childFolders.length; i++) {
+          const serverChildFolder = action.payload.childFolders[i];
+          const localChildFolder = findFolderById(state.rootFolder, serverChildFolder.id);
+          if (!localChildFolder) {
+            localFolder.childFolders.push(serverChildFolder);
+          } else {
+
+          }
+        }
+      }
     }
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loadRootFolder.pending, (state) => {
-        
-      })
-      .addCase(loadRootFolder.fulfilled, (state, action) => {
+      .addCase(retrieveRootFolder.fulfilled, (state, action) => {
         fileSlice.caseReducers.setRootFolder(state, action);
       })
-      .addCase(loadRootFolder.rejected, (state) => {
-        
+      .addCase(submitFolderCreation.fulfilled, (state, action) => {
+        const addChildAction: PayloadAction<{ parentId: string, child: FolderModel }> = {
+          payload: {
+            parentId: action.payload.parentId,
+            child: action.payload
+          },
+          type: "file/addChildFolder"
+        }
+        fileSlice.caseReducers.addChildFolder(state, addChildAction);
+      })
+      .addCase(submitFileCreation.fulfilled, (state, action) => {
+        const addChildAction: PayloadAction<{ parentId: string, child: FileModel }> = {
+          payload: {
+            parentId: action.payload.folderId,
+            child: action.payload
+          },
+          type: "file/addChildFile"
+        }
+        fileSlice.caseReducers.addChildFile(state, addChildAction);
+      })
+      .addCase(retrieveFolder.fulfilled, (state, action) => {
+        const updateAction: PayloadAction<FolderModel> = {
+          payload: action.payload,
+          type: "file/updateFolder"
+        }
+        fileSlice.caseReducers.updateFolder(state, updateAction);
       })
   },
 });

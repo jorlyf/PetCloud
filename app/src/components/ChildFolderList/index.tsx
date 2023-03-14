@@ -15,7 +15,7 @@ const ChildFolderList: React.FC<IChildFolderListProps> = ({ folder }) => {
     <div className={styles.ChildFolderList}>
       {folder.childFolders.map(f => {
         return (
-          <div key={f.path} onClick={() => dispatch(openFolder(f))} className={styles.Child}>
+          <div key={f.id} onClick={() => dispatch(openFolder(f))} className={styles.Child}>
             <img src="/images/Folder.png" />
             <span>{f.name}</span>
           </div>

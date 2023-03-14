@@ -9,6 +9,10 @@ export default class FolderRetrievalService {
     const { data } = await $api.get<FolderDTO>("/Retrieval/GetRootFolder");
     return FolderRetrievalService.processFolderDTO(data);
   }
+  static async retrieveFolder(folderId: string): Promise<FolderModel | null> {
+    const { data } = await $api.get<FolderDTO>(`/Retrieval/GetFolder?folderId=${folderId}`);
+    return FolderRetrievalService.processFolderDTO(data);
+  }
 
   static processFolderDTO(dto: FolderDTO): FolderModel {
     return {

@@ -1,7 +1,5 @@
-import { clear, setFolderName } from "@redux/slices/createFolder";
-import { addChildFolder } from "@redux/slices/file";
+import { clear, setFolderName, submitFolderCreation } from "@redux/slices/createFolder";
 import useAppDispatch from "@hooks/useAppDispatch";
-import FolderModel from "@entities/file/FolderModel";
 import useOpenedFolder from "@hooks/useOpenedFolder";
 import useAppSelector from "@hooks/useAppSelector";
 
@@ -16,14 +14,7 @@ const useCreateFolderModal = () => {
   }
 
   const handleCreateFolder = () => {
-    // const folder: FolderModel = {
-    //   id: "",
-    //   name: folderName,
-    //   isRoot: false,
-    //   childFolders: [],
-    //   files: []
-    // }
-    // dispatch(addChildFolder(folder));
+    dispatch(submitFolderCreation({ parentFolderId: openedFolder.id, folderName }));
     dispatch(clear());
   }
   const handleCloseModal = () => {

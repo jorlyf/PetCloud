@@ -4,3 +4,7 @@ api.sln
 /api/obj
 /api/appsettings.json
 /api/appsettings.Development.json
+/api/PetCloud.db
+
+# a folder for user files
+/api/CloudData

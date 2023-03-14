@@ -1,4 +1,13 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import FileModel from "@entities/file/FileModel";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import FileHierarchyCreationService from "@services/FileHierarchyCreationService/FileHierarchyCreationService";
+
+export const submitFileCreation = createAsyncThunk<FileModel, { folderId: string, fileName: string }>(
+  "createFile/submitFileCreation",
+  async ({ folderId, fileName }) => {
+    return FileHierarchyCreationService.createEmptyFile(folderId, fileName);
+  }
+);
 
 interface CreateFileState {
   isOpenModal: boolean;
