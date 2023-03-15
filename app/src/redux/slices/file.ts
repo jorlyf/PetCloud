@@ -5,12 +5,14 @@ import Vector2 from "@entities/common/Vector2";
 import FileModel from "@entities/file/FileModel";
 import { submitFolderCreation } from "./createFolder";
 import { submitFileCreation } from "./createFile";
+import store from "@redux/store";
 
-export const retrieveRootFolder = createAsyncThunk<FolderModel>(
+export const retrieveRootFolder = createAsyncThunk<{ root: FolderModel, login: string }>(
   "file/retrieveRootFolder",
   async () => {
     const rootFolder = await FolderRetrievalService.retrieveRoot();
-    return rootFolder;
+    const login = store.getState().user.login;
+    return { root: rootFolder, login };
   }
 );
 
@@ -115,6 +117,8 @@ const fileSlice = createSlice({
 
       } else {
         localFolder.name = action.payload.name;
+        const parent = findFolderById(state.rootFolder, action.payload.parentId);
+        if (parent) localFolder.path = `${parent.path}\\${action.payload.name}`;
 
         for (let i = 0; i < action.payload.childFolders.length; i++) {
           const serverChildFolder = action.payload.childFolders[i];
@@ -131,7 +135,12 @@ const fileSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(retrieveRootFolder.fulfilled, (state, action) => {
-        fileSlice.caseReducers.setRootFolder(state, action);
+        action.payload.root.path = `${action.payload.login}\\Root`;
+        const setRootAction: PayloadAction<FolderModel> = {
+          payload: action.payload.root,
+          type: "file/setRootFolder"
+        }
+        fileSlice.caseReducers.setRootFolder(state, setRootAction);
       })
       .addCase(submitFolderCreation.fulfilled, (state, action) => {
         const addChildAction: PayloadAction<{ parentId: string, child: FolderModel }> = {

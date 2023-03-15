@@ -67,7 +67,7 @@ namespace api.Services.FileHierarchy
 			FolderDTO dto = FolderDTO.GetDTO(createdFolder, Enumerable.Empty<Folder>());
 			return dto;
 		}
-		public async Task CreateRootFolder(User user)
+		public async Task CreateRootFolder(Entities.User.User user)
 		{
 			string folderNameOnDisk = GenerateFileName();
 
@@ -96,13 +96,13 @@ namespace api.Services.FileHierarchy
 
 			switch (extension)
 			{
-				case "png":
-				case "jpg":
-				case "jpeg":
+				case ".png":
+				case ".jpg":
+				case ".jpeg":
 					return FileType.Picture;
-				case "mp4":
+				case ".mp4":
 					return FileType.Video;
-				case "txt":
+				case ".txt":
 					return FileType.Text;
 
 				default: return FileType.Undefined;
@@ -110,7 +110,7 @@ namespace api.Services.FileHierarchy
 		}
 		private async Task<Folder> GetRootFolder(Guid userId)
 		{
-			User? user = await _UoW.UserRepository
+			Entities.User.User? user = await _UoW.UserRepository
 				.GetById(userId)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
@@ -122,7 +122,7 @@ namespace api.Services.FileHierarchy
 			if (folder == null) throw new HierarchyCreationException(HierarchyCreationExceptionReasonCode.FolderDoesntExist);
 			return folder;
 		}
-		private async Task<Folder> GetRootFolder(User user)
+		private async Task<Folder> GetRootFolder(Entities.User.User user)
 		{
 			Folder? folder = await _UoW.FolderRepository
 				.GetById(user.RootFolderId)

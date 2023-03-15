@@ -9,7 +9,6 @@ const OpenedFolderInfo: React.FC = () => {
   } = useOpenedFolderInfo();
   
   if (!openedFolder) return (<></>)
-
   return (
     <div className={styles.FolderInfo}>
       <span className={styles.Name}>{openedFolder.name}</span>

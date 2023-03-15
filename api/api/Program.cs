@@ -4,6 +4,7 @@ using api.Infrastructure.Utils;
 using api.Repositories.UnitOfWork;
 using api.Services.Authorization;
 using api.Services.FileHierarchy;
+using api.Services.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -47,6 +48,7 @@ builder.Services.AddScoped<UnitOfWork>();
 builder.Services.AddScoped<AuthorizationService>();
 builder.Services.AddScoped<FileHierarchyCreationService>();
 builder.Services.AddScoped<FolderRetrievalService>();
+builder.Services.AddScoped<UserService>();
 #endregion
 
 builder.Services.AddCors(options =>

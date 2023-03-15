@@ -1,4 +1,6 @@
-﻿namespace api.Entities.FileHierarchy
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace api.Entities.FileHierarchy
 {
 	public enum FileType : byte
 	{
@@ -7,6 +9,7 @@
 		Picture,
 		Video
 	}
+	[Index(nameof(Path), IsUnique = true)]
 	public class File : IEntity
 	{
 		public Guid Id { get; set; }

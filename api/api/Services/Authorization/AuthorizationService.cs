@@ -27,7 +27,7 @@ namespace api.Services.Authorization
 
 		public async Task<string> LoginAsync(string login, string password)
 		{
-			User? user = await _UoW.UserRepository
+			Entities.User.User? user = await _UoW.UserRepository
 				.GetByLogin(login)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
@@ -50,7 +50,7 @@ namespace api.Services.Authorization
 			}
 
 			string passwordHash = _hashService.GetHash(password);
-			User user = new()
+			Entities.User.User user = new()
 			{
 				Login = login,
 				PasswordHash = passwordHash
@@ -65,7 +65,7 @@ namespace api.Services.Authorization
 		}
 		public async Task<bool> IsUserLoginExist(string login)
 		{
-			User? user = await _UoW.UserRepository
+			Entities.User.User? user = await _UoW.UserRepository
 				.GetByLogin(login)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();

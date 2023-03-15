@@ -17,7 +17,7 @@ namespace api.Services.FileHierarchy
 
 		public async Task<FolderDTO> GetRootFolderDTO(Guid userId)
 		{
-			User? user = await _UoW.UserRepository
+			Entities.User.User? user = await _UoW.UserRepository
 				.GetById(userId)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
@@ -37,7 +37,7 @@ namespace api.Services.FileHierarchy
 		}
 		public async Task<FolderDTO> GetFolderDTOById(Guid userId, Guid folderId)
 		{
-			User? user = await _UoW.UserRepository
+			Entities.User.User? user = await _UoW.UserRepository
 				.GetById(userId)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
