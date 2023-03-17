@@ -11,9 +11,9 @@ const useFileList = (fileListDivRef: React.MutableRefObject<HTMLDivElement>) => 
   const isOpenFileAreaContextMenu = useAppSelector(state => state.file.isOpenFileAreaContextMenu);
   const fileAreaContextMenuPosition = useAppSelector(state => state.file.fileAreaContextMenuPosition);
 
-  const handleOpenFileContextMenu = (e: React.MouseEvent<HTMLDivElement>, filePath: string) => {
+  const handleOpenFileContextMenu = (e: React.MouseEvent<HTMLDivElement>, fileId: string) => {
     e.preventDefault();
-    dispatch(openFileContextMenu({ filePath, position: { x: e.pageX, y: e.pageY } }));
+    dispatch(openFileContextMenu({ fileId, position: { x: e.pageX, y: e.pageY } }));
   }
   const handleCloseFileContextMenu = () => {
     dispatch(closeFileContextMenu());

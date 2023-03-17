@@ -58,5 +58,25 @@ namespace api.Controllers
 				return BadRequest(new InternalException().GetData());
 			}
 		}
+
+		[HttpPost]
+		[Route("UpdateTextFile")]
+		public async Task<ActionResult> UpdateTextFile(Guid fileId, string text)
+		{
+			try
+			{
+				Guid userId = IdentityUtils.GetAuthorizedUserId(User);
+				
+				return Ok();
+			}
+			catch (ApiExceptionBase ex)
+			{
+				return BadRequest(ex.GetData());
+			}
+			catch (Exception)
+			{
+				return BadRequest(new InternalException().GetData());
+			}
+		}
 	}
 }

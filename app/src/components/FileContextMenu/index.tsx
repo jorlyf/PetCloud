@@ -12,7 +12,7 @@ interface IFileContextMenuProps {
 
 const FileContextMenu: React.FC<IFileContextMenuProps> = ({ position, handleClose }) => {
   const {
-    
+    handleOpenFile
   } = useFileContextMenu();
 
   const divRef = React.useRef(null);
@@ -21,6 +21,9 @@ const FileContextMenu: React.FC<IFileContextMenuProps> = ({ position, handleClos
 
   return (
     <div ref={divRef} className={styles.FileContextMenu} style={{ left: position.x, top: position.y }}>
+      <div onClick={() => handleOpenFile()} className={styles.Item}>
+        <span>Открыть</span>
+      </div>
       <div className={styles.Item}>
         <span>Переименовать</span>
       </div>

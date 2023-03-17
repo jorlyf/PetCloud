@@ -35,29 +35,45 @@ export const findFolderById = (root: FolderModel, id: string): FolderModel | nul
   }
   return null;
 }
+export const findFileById = (root: FolderModel, id: string): FileModel | null => {
+  if (root === null) return null;
+  for (let i = 0; i < root.files.length; i++) {
+    if (root.files[i].id === id) return root.files[i];
+  }
+  for (let i = 0; i < root.childFolders.length; i++) {
+    const folder = root.childFolders[i];
+    const result = findFileById(folder, id);
+    if (result !== null) return result;
+  }
+  return null;
+}
 
 interface IFileState {
   openedFolderId: string | null;
   rootFolder: FolderModel | null;
+
+  openedFileId: string | null;
 
   isOpenFileAreaContextMenu: boolean;
   fileAreaContextMenuPosition: Vector2 | null;
 
   isOpenFileContextMenu: boolean;
   fileContextMenuPosition: Vector2 | null;
-  selectedFilePathContextMenu: string | null;
+  contextMenuSelectedFileId: string | null;
 }
 
 const initialState: IFileState = {
   openedFolderId: null,
   rootFolder: null,
 
+  openedFileId: null,
+
   isOpenFileAreaContextMenu: false,
   fileAreaContextMenuPosition: null,
 
   isOpenFileContextMenu: false,
   fileContextMenuPosition: null,
-  selectedFilePathContextMenu: null
+  contextMenuSelectedFileId: null
 }
 
 const fileSlice = createSlice({
@@ -99,17 +115,17 @@ const fileSlice = createSlice({
       state.isOpenFileAreaContextMenu = false;
       state.fileAreaContextMenuPosition = null;
     },
-    openFileContextMenu: (state, action: PayloadAction<{ filePath: string, position: Vector2 }>) => {
+    openFileContextMenu: (state, action: PayloadAction<{ fileId: string, position: Vector2 }>) => {
       state.isOpenFileContextMenu = true;
       state.fileContextMenuPosition = action.payload.position;
-      state.selectedFilePathContextMenu = action.payload.filePath;
+      state.contextMenuSelectedFileId = action.payload.fileId;
 
       fileSlice.caseReducers.closeFileAreaContexteMenu(state);
     },
     closeFileContextMenu: (state) => {
       state.isOpenFileContextMenu = false;
       state.fileContextMenuPosition = null;
-      state.selectedFilePathContextMenu = null;
+      state.contextMenuSelectedFileId = null;
     },
     updateFolder: (state, action: PayloadAction<FolderModel>) => {
       const localFolder = findFolderById(state.rootFolder, action.payload.id);
@@ -130,6 +146,12 @@ const fileSlice = createSlice({
           }
         }
       }
+    },
+    openFile: (state, action: PayloadAction<FileModel>) => {
+      state.openedFileId = action.payload.id;
+    },
+    closeFile: (state) => {
+      state.openedFileId = null;
     }
   },
   extraReducers: (builder) => {
@@ -182,7 +204,9 @@ export const {
   openFileAreaContextMenu,
   closeFileAreaContexteMenu,
   openFileContextMenu,
-  closeFileContextMenu
+  closeFileContextMenu,
+  openFile,
+  closeFile
 } = fileSlice.actions;
 
 export default fileSlice.reducer;

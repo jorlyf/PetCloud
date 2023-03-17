@@ -9,7 +9,7 @@ const useOpenedFolder = (): FolderModel | null => {
 
   const [openedFolder, setOpenedFolder] = React.useState<FolderModel | null>(null);
 
-  React.useMemo(() => {
+  React.useEffect(() => {
     setOpenedFolder(findFolderById(rootFolder, openedFolderId));
   }, [rootFolder, openedFolderId]);
 
