@@ -48,6 +48,7 @@ builder.Services.AddScoped<UnitOfWork>();
 builder.Services.AddScoped<AuthorizationService>();
 builder.Services.AddScoped<FileHierarchyCreationService>();
 builder.Services.AddScoped<FolderRetrievalService>();
+builder.Services.AddScoped<FileRetrievalService>();
 builder.Services.AddScoped<UserService>();
 #endregion
 

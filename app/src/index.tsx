@@ -13,6 +13,16 @@ if (!element) {
   throw new Error("root element not found.");
 }
 
+const consoleError = console.error; // eslint-disable-line no-console
+console.error = (...args) => { // eslint-disable-line no-console
+  if (args && typeof args[0] === 'string' && args[0].indexOf('A non-serializable value was detected in') > -1) {
+    // Ignore.
+  } else {
+    // Log the error as normally.
+    consoleError.apply(console, args);
+  }
+};
+
 const root = createRoot(element);
 root.render(
   <Provider store={store}>

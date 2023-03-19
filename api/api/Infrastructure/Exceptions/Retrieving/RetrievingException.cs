@@ -3,7 +3,8 @@
 	public enum RetrievingExceptionReasonCode
 	{
 		UserDoesntExist,
-		FolderDoesntExist
+		FolderDoesntExist,
+		FileDoesntExist
 	}
 	public class RetrievingException : ApiExceptionBase
 	{

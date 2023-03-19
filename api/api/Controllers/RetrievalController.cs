@@ -13,10 +13,12 @@ namespace api.Controllers
 	public class RetrievalController : ControllerBase
 	{
 		private readonly FolderRetrievalService _folderRetrievalService;
+		private readonly FileRetrievalService _fileRetrievalService;
 
-		public RetrievalController(FolderRetrievalService folderRetrievalService)
+		public RetrievalController(FolderRetrievalService folderRetrievalService, FileRetrievalService fileRetrievalService)
 		{
 			_folderRetrievalService = folderRetrievalService;
+			_fileRetrievalService = fileRetrievalService;
 		}
 
 		[HttpGet]
@@ -52,6 +54,23 @@ namespace api.Controllers
 			catch (ApiExceptionBase ex)
 			{
 				return BadRequest(ex.GetData());
+			}
+			catch (Exception)
+			{
+				return BadRequest(new InternalException().GetData());
+			}
+		}
+
+		[HttpGet]
+		[Route("GetFileContent")]
+		public async Task<IActionResult> GetFileContent(Guid fileId)
+		{
+			try
+			{
+				Guid userId = IdentityUtils.GetAuthorizedUserId(User);
+				FileStream stream = await _fileRetrievalService.GetFileStream(userId, fileId);
+				FileStreamResult result = new FileStreamResult(stream, "application/octet-stream");
+				return result;
 			}
 			catch (Exception)
 			{

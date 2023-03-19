@@ -1,11 +1,15 @@
+import * as React from "react";
 import { closeFile } from "@redux/slices/file";
+import { clearContent, loadFileContent } from "@redux/slices/openedFile";
 import useAppDispatch from "@hooks/useAppDispatch";
 import useOpenedFile from "@hooks/useOpenedFile";
 import { FileType } from "@entities/file/FileModel";
+import useAppSelector from "@hooks/useAppSelector";
 
 const useFileViewModal = () => {
   const dispatch = useAppDispatch();
   const openedFile = useOpenedFile();
+  const fileLoaded = useAppSelector(state => state.openedFile.loaded);
 
   const fileType = openedFile ? openedFile.type : null;
 
@@ -16,9 +20,20 @@ const useFileViewModal = () => {
     } else dispatch(closeFile());
   }
 
+  const retrieveFileContent = () => {
+    dispatch(clearContent());
+    dispatch(loadFileContent(openedFile.id));
+  }
+
+  React.useEffect(() => {
+    if (!openedFile) return;
+    retrieveFileContent();
+  }, [openedFile]);
+
   return {
     fileType,
-    handleCloseFile
+    handleCloseFile,
+    fileLoaded
   }
 }
 export default useFileViewModal;

@@ -49,6 +49,7 @@ namespace api.Services.FileHierarchy
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
 			if (folder == null) throw new RetrievingException(RetrievingExceptionReasonCode.FolderDoesntExist);
+			if (folder.UserId != user.Id) throw new NotImplementedException();
 
 			IEnumerable<Folder> childs = await GetFolderChilds(userId, folder.Id);
 
