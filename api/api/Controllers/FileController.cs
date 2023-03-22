@@ -1,5 +1,4 @@
 ﻿using api.Entities.FileHierarchy;
-using api.Infrastructure.Exceptions;
 using api.Infrastructure.Utils;
 using api.Services.FileHierarchy;
 using Microsoft.AspNetCore.Authorization;
@@ -23,60 +22,27 @@ namespace api.Controllers
 		[Route("CreateEmptyFolder")]
 		public async Task<ActionResult<FolderDTO>> CreateEmptyFolder(Guid parentFolderId, string folderName)
 		{
-			try
-			{
-				Guid userId = IdentityUtils.GetAuthorizedUserId(User);
-				FolderDTO dto = await _fileHierarchyCreationService.CreateEmptyFolder(userId, parentFolderId, folderName);
-				return Ok(dto);
-			}
-			catch (ApiExceptionBase ex)
-			{
-				return BadRequest(ex.GetData());
-			}
-			catch (Exception)
-			{
-				return BadRequest(new InternalException().GetData());
-			}
+			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
+			FolderDTO dto = await _fileHierarchyCreationService.CreateEmptyFolder(userId, parentFolderId, folderName);
+			return Ok(dto);
 		}
 
 		[HttpPost]
 		[Route("CreateEmptyFile")]
 		public async Task<ActionResult<FileDTO>> CreateEmptyFile(Guid folderId, string fileName)
 		{
-			try
-			{
-				Guid userId = IdentityUtils.GetAuthorizedUserId(User);
-				FileDTO dto = await _fileHierarchyCreationService.CreateEmptyFile(userId, folderId, fileName);
-				return Ok(dto);
-			}
-			catch (ApiExceptionBase ex)
-			{
-				return BadRequest(ex.GetData());
-			}
-			catch (Exception)
-			{
-				return BadRequest(new InternalException().GetData());
-			}
+			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
+			FileDTO dto = await _fileHierarchyCreationService.CreateEmptyFile(userId, folderId, fileName);
+			return Ok(dto);
 		}
 
 		[HttpPost]
 		[Route("UpdateTextFile")]
 		public async Task<ActionResult> UpdateTextFile(Guid fileId, string text)
 		{
-			try
-			{
-				Guid userId = IdentityUtils.GetAuthorizedUserId(User);
-				
-				return Ok();
-			}
-			catch (ApiExceptionBase ex)
-			{
-				return BadRequest(ex.GetData());
-			}
-			catch (Exception)
-			{
-				return BadRequest(new InternalException().GetData());
-			}
+			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
+
+			return Ok();
 		}
 	}
 }

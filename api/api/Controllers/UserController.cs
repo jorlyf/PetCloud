@@ -1,5 +1,4 @@
 ﻿using api.Entities.User;
-using api.Infrastructure.Exceptions;
 using api.Infrastructure.Utils;
 using api.Services.User;
 using Microsoft.AspNetCore.Authorization;
@@ -23,19 +22,8 @@ namespace api.Controllers
 		[Route("GetUser")]
 		public async Task<ActionResult<UserDTO>> GetUser()
 		{
-			try
-			{
-				Guid userId = IdentityUtils.GetAuthorizedUserId(User);
-				return await _userService.GetUserDTOAsync(userId);
-			}
-			catch (ApiExceptionBase ex)
-			{
-				return BadRequest(ex.GetData());
-			}
-			catch (Exception)
-			{
-				return BadRequest(new InternalException().GetData());
-			}
+			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
+			return await _userService.GetUserDTOAsync(userId);
 		}
 	}
 }

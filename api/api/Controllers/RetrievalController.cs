@@ -1,5 +1,4 @@
 ﻿using api.Entities.FileHierarchy;
-using api.Infrastructure.Exceptions;
 using api.Infrastructure.Utils;
 using api.Services.FileHierarchy;
 using Microsoft.AspNetCore.Authorization;
@@ -25,57 +24,28 @@ namespace api.Controllers
 		[Route("GetRootFolder")]
 		public async Task<ActionResult<FolderDTO>> GetRootFolder()
 		{
-			try
-			{
-				Guid userId = IdentityUtils.GetAuthorizedUserId(User);
-				FolderDTO dto = await _folderRetrievalService.GetRootFolderDTO(userId);
-				return Ok(dto);
-			}
-			catch (ApiExceptionBase ex)
-			{
-				return BadRequest(ex.GetData());
-			}
-			catch (Exception)
-			{
-				return BadRequest(new InternalException().GetData());
-			}
+			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
+			FolderDTO dto = await _folderRetrievalService.GetRootFolderDTO(userId);
+			return Ok(dto);
 		}
 
 		[HttpGet]
 		[Route("GetFolder")]
 		public async Task<ActionResult<FolderDTO>> GetFolder(Guid folderId)
 		{
-			try
-			{
-				Guid userId = IdentityUtils.GetAuthorizedUserId(User);
-				FolderDTO dto = await _folderRetrievalService.GetFolderDTOById(userId, folderId);
-				return Ok(dto);
-			}
-			catch (ApiExceptionBase ex)
-			{
-				return BadRequest(ex.GetData());
-			}
-			catch (Exception)
-			{
-				return BadRequest(new InternalException().GetData());
-			}
+			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
+			FolderDTO dto = await _folderRetrievalService.GetFolderDTOById(userId, folderId);
+			return Ok(dto);
 		}
 
 		[HttpGet]
 		[Route("GetFileContent")]
 		public async Task<IActionResult> GetFileContent(Guid fileId)
 		{
-			try
-			{
-				Guid userId = IdentityUtils.GetAuthorizedUserId(User);
-				FileStream stream = await _fileRetrievalService.GetFileStream(userId, fileId);
-				FileStreamResult result = new FileStreamResult(stream, "application/octet-stream");
-				return result;
-			}
-			catch (Exception)
-			{
-				return BadRequest(new InternalException().GetData());
-			}
+			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
+			FileStream stream = await _fileRetrievalService.GetFileStream(userId, fileId);
+			FileStreamResult result = new FileStreamResult(stream, "application/octet-stream");
+			return result;
 		}
 	}
 }

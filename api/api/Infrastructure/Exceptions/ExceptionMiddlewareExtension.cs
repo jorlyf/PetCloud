@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
+using System.Net;
+
 namespace api.Infrastructure.Exceptions
 {
 	public static class ExceptionMiddlewareExtension
@@ -14,10 +16,17 @@ namespace api.Infrastructure.Exceptions
 					if (exception != null)
 					{
 						ApiErrorData errorData;
-						if (exception is ApiExceptionBase apiException) { errorData = apiException.GetData(); }
-						else { errorData = new InternalException().GetData(); }
+						if (exception is ApiExceptionBase apiException)
+						{
+							errorData = apiException.GetData();
+							context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+						}
+						else
+						{
+							errorData = new InternalException().GetData();
+							context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+						}
 
-						context.Response.StatusCode = errorData.Code;
 						await context.Response.WriteAsync(errorData.ToString());
 					}
 				});
