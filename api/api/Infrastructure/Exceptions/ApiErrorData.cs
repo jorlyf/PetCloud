@@ -1,4 +1,6 @@
-﻿namespace api.Infrastructure.Exceptions
+﻿using System.Text.Json;
+
+namespace api.Infrastructure.Exceptions
 {
 	public struct ApiErrorData
 	{
@@ -9,6 +11,11 @@
 		{
 			Type = exception.Type;
 			Code = exception.Code;
+		}
+
+		public override string ToString()
+		{
+			return JsonSerializer.Serialize(this);
 		}
 	}
 }

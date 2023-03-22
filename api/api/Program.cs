@@ -1,4 +1,5 @@
 using api.DbContexts;
+using api.Infrastructure.Exceptions;
 using api.Infrastructure.StartupActions;
 using api.Infrastructure.Utils;
 using api.Repositories.UnitOfWork;
@@ -82,6 +83,8 @@ else
 {
 	app.UseCors("Production");
 }
+
+app.ConfigureExceptionHandler(); // custom exception handler
 
 app.UseHttpsRedirection();
 
