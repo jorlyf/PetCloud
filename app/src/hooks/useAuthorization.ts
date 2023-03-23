@@ -29,7 +29,7 @@ const useAuthorization = () => {
 
   React.useEffect(() => {
     if (authState.wasInitLoginAttempt) {
-      LocalStorageService.setToken(authState.token);
+      authState.token ? LocalStorageService.setToken(authState.token) : LocalStorageService.clearToken();
       setupApiToken(authState.token);
     }
   }, [authState.token]);
@@ -45,6 +45,6 @@ const useAuthorization = () => {
       dispatch(loadUser());
     }
   }, [dispatch, authState.isAuthorized]);
-  
+
 }
 export default useAuthorization;

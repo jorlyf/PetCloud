@@ -1,8 +1,17 @@
 import * as React from "react";
+import useHeader from "./useHeader";
+import DropDownList from "@components/DropDownList";
 
 import styles from "./index.module.scss";
 
 const Header: React.FC = () => {
+
+  const {
+    isActiveDropDownList,
+    handleClickDropDownList,
+    dropDownMenuItems
+  } = useHeader();
+
   return (
     <div className={styles.Header}>
       <div className={styles.Logo}>
@@ -14,7 +23,8 @@ const Header: React.FC = () => {
           <img src="/images/TestAvatar.png" />
         </div>
         <div className={styles.ArrowMenu}>
-          <img src="/images/ArrowDown.png" />
+          <img onClick={handleClickDropDownList} src="/images/ArrowDown.png" />
+          {isActiveDropDownList && <DropDownList items={dropDownMenuItems} />}
         </div>
       </div>
     </div>
