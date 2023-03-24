@@ -42,13 +42,22 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(css|scss)$/,
+        test: /\.(css)$/, // hash class names brokes styles of react-notification-component library
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+          },
+          "sass-loader"]
+      },
+      {
+        test: /\.(scss)$/,
         use: [
           "style-loader",
           {
             loader: "css-loader",
             options: {
-              modules: { localIdentName: "[local]--[hash:base64:5]",  }
+              modules: { localIdentName: "[local]--[hash:base64:5]", },
             }
           },
           "sass-loader"]

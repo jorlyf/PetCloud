@@ -7,6 +7,8 @@ import App from "./App";
 
 import "./index.scss";
 import "./colorDefinition.scss";
+import "react-notifications-component/dist/theme.css";
+import { ReactNotifications } from "react-notifications-component";
 
 const element = document.getElementById("root");
 if (!element) {
@@ -27,6 +29,7 @@ const root = createRoot(element);
 root.render(
   <Provider store={store}>
     <BrowserRouter>
+      <ReactNotifications />
       <App />
     </BrowserRouter>
   </Provider>
