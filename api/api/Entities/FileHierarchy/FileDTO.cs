@@ -1,4 +1,4 @@
-﻿namespace api.Entities.FileHierarchy
+﻿namespace api.Entities.FileHierarchyNS
 {
 	public class FileDTO
 	{

@@ -16,14 +16,14 @@ namespace api.Infrastructure.Exceptions
 					if (exception != null)
 					{
 						ApiErrorData errorData;
-						if (exception is ApiExceptionBase apiException)
+						if (exception is ApiException apiException)
 						{
 							errorData = apiException.GetData();
 							context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 						}
 						else
 						{
-							errorData = new InternalException().GetData();
+							errorData = new InternalApiException().GetData();
 							context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 						}
 

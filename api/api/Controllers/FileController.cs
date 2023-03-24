@@ -1,8 +1,9 @@
-﻿using api.Entities.FileHierarchy;
+﻿using api.Entities.FileHierarchyNS;
 using api.Infrastructure.Utils;
-using api.Services.FileHierarchy;
+using api.Services.FileHierarchyServicesNS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace api.Controllers
 {
@@ -12,10 +13,15 @@ namespace api.Controllers
 	public class FileController : ControllerBase
 	{
 		private readonly FileHierarchyCreationService _fileHierarchyCreationService;
+		private readonly FileEditorService _fileEditorService;
 
-		public FileController(FileHierarchyCreationService fileHierarchyCreationService)
+		public FileController(
+			FileHierarchyCreationService fileHierarchyCreationService,
+			FileEditorService fileEditorService
+			)
 		{
 			_fileHierarchyCreationService = fileHierarchyCreationService;
+			_fileEditorService = fileEditorService;
 		}
 
 		[HttpPost]
@@ -38,10 +44,15 @@ namespace api.Controllers
 
 		[HttpPost]
 		[Route("UpdateTextFile")]
-		public async Task<ActionResult> UpdateTextFile(Guid fileId, string text)
+		public async Task<ActionResult> UpdateTextFile(Guid fileId)
 		{
+			string content;
+			using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+			{
+				content = await reader.ReadToEndAsync(); // returns raw data which is sent in body
+			}
 			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
-
+			await _fileEditorService.UpdateTextFile(userId, fileId, content);
 			return Ok();
 		}
 	}

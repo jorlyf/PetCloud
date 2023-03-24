@@ -1,6 +1,6 @@
 ﻿using api.DbContexts;
 using api.Repositories.Base;
-using File = api.Entities.FileHierarchy.File;
+using File = api.Entities.FileHierarchyNS.File;
 
 namespace api.Repositories
 {

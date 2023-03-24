@@ -6,7 +6,8 @@ import styles from "./index.module.scss";
 const TxtEditor: React.FC = () => {
   const {
     text,
-    setText
+    setText,
+    handleSaveText
   } = useTxtEditor();
 
   return (
@@ -15,6 +16,9 @@ const TxtEditor: React.FC = () => {
         value={text}
         onChange={setText}
       />
+      <div className={styles.Buttons}>
+        <button onClick={handleSaveText}>Сохранить</button>
+      </div>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace api.Entities.FileHierarchy
+namespace api.Entities.FileHierarchyNS
 {
 	[Index(nameof(Path), IsUnique = true)]
 	public class Folder : IEntity	

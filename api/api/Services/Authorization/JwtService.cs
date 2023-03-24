@@ -1,9 +1,10 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using api.Entities.UserNS;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace api.Services.Authorization
+namespace api.Services.AuthorizationServicesNS
 {
 	public class JwtService
 	{
@@ -14,7 +15,7 @@ namespace api.Services.Authorization
 		}
 
 
-		public string GenerateToken(Entities.User.User user)
+		public string GenerateToken(User user)
 		{
 			Claim[] claims = new[]
 			{

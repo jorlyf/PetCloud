@@ -1,10 +1,10 @@
-﻿using api.Entities.User;
-using api.Infrastructure.Exceptions.Authorization;
+﻿using api.Entities.UserNS;
+using api.Infrastructure.Exceptions;
 using api.Repositories.UnitOfWork;
-using api.Services.FileHierarchy;
+using api.Services.FileHierarchyServicesNS;
 using Microsoft.EntityFrameworkCore;
 
-namespace api.Services.Authorization
+namespace api.Services.AuthorizationServicesNS
 {
 	public class AuthorizationService
 	{
@@ -27,7 +27,7 @@ namespace api.Services.Authorization
 
 		public async Task<string> LoginAsync(string login, string password)
 		{
-			Entities.User.User? user = await _UoW.UserRepository
+			User? user = await _UoW.UserRepository
 				.GetByLogin(login)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
@@ -35,7 +35,7 @@ namespace api.Services.Authorization
 			string passwordHash = _hashService.GetHash(password);
 			if (user == null || user.PasswordHash != passwordHash)
 			{
-				throw new AuthorizationException(AuthorizationExceptionReasonCode.IncorrectLoginData);
+				throw new ApiException(ApiExceptionCode.IncorrectResponseData, "User login or password is not valid.");
 			}
 
 			string token = _jwtService.GenerateToken(user);
@@ -46,11 +46,11 @@ namespace api.Services.Authorization
 		{
 			if (await IsUserLoginExist(login))
 			{
-				throw new AuthorizationException(AuthorizationExceptionReasonCode.UserLoginExist);
+				throw new ApiException(ApiExceptionCode.IncorrectResponseData, "User login already exist.");
 			}
 
 			string passwordHash = _hashService.GetHash(password);
-			Entities.User.User user = new()
+			User user = new()
 			{
 				Login = login,
 				PasswordHash = passwordHash
@@ -65,7 +65,7 @@ namespace api.Services.Authorization
 		}
 		public async Task<bool> IsUserLoginExist(string login)
 		{
-			Entities.User.User? user = await _UoW.UserRepository
+			User? user = await _UoW.UserRepository
 				.GetByLogin(login)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();

@@ -1,6 +1,6 @@
-﻿using api.Entities.FileHierarchy;
+﻿using api.Entities.FileHierarchyNS;
 using api.Infrastructure.Utils;
-using api.Services.FileHierarchy;
+using api.Services.FileHierarchyServicesNS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

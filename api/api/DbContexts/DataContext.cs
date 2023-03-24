@@ -1,7 +1,8 @@
-﻿using api.Entities.FileHierarchy;
-using api.Entities.User;
+﻿using api.Entities.FileHierarchyNS;
+using api.Entities.UserNS;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
+using File = api.Entities.FileHierarchyNS.File;
 
 namespace api.DbContexts
 {
@@ -9,7 +10,7 @@ namespace api.DbContexts
 	{
 		public DbSet<User> Users { get; set; }
 		public DbSet<Folder> Folders { get; set; }
-		public DbSet<Entities.FileHierarchy.File> Files { get; set; }
+		public DbSet<File> Files { get; set; }
 
 		public DataContext(DbContextOptions<DataContext> options) : base(options)
 		{

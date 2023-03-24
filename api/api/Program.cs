@@ -3,9 +3,9 @@ using api.Infrastructure.Exceptions;
 using api.Infrastructure.StartupActions;
 using api.Infrastructure.Utils;
 using api.Repositories.UnitOfWork;
-using api.Services.Authorization;
-using api.Services.FileHierarchy;
-using api.Services.User;
+using api.Services.AuthorizationServicesNS;
+using api.Services.FileHierarchyServicesNS;
+using api.Services.UserServiceNS;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -42,12 +42,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 #region Custom services
 builder.Services.AddSingleton<HashService>();
 builder.Services.AddSingleton<JwtService>();
-builder.Services.AddSingleton<FileCreator>();
+builder.Services.AddSingleton<FileCreatorService>();
 
 builder.Services.AddScoped<UnitOfWork>();
 
 builder.Services.AddScoped<AuthorizationService>();
 builder.Services.AddScoped<FileHierarchyCreationService>();
+builder.Services.AddScoped<FileEditorService>();
 builder.Services.AddScoped<FolderRetrievalService>();
 builder.Services.AddScoped<FileRetrievalService>();
 builder.Services.AddScoped<UserService>();

@@ -1,18 +1,18 @@
-﻿using api.Entities.FileHierarchy;
-using api.Entities.User;
-using api.Infrastructure.Exceptions.HierarchyCreation;
+﻿using api.Entities.FileHierarchyNS;
+using api.Entities.UserNS;
+using api.Infrastructure.Exceptions;
 using api.Infrastructure.Utils;
 using api.Repositories.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using File = api.Entities.FileHierarchy.File;
+using File = api.Entities.FileHierarchyNS.File;
 
-namespace api.Services.FileHierarchy
+namespace api.Services.FileHierarchyServicesNS
 {
 	public class FileHierarchyCreationService
 	{
 		private readonly UnitOfWork _UoW;
-		private readonly FileCreator _fileCreator;
-		public FileHierarchyCreationService(UnitOfWork uow, FileCreator fileCreator)
+		private readonly FileCreatorService _fileCreator;
+		public FileHierarchyCreationService(UnitOfWork uow, FileCreatorService fileCreator)
 		{
 			_UoW = uow;
 			_fileCreator = fileCreator;
@@ -24,7 +24,7 @@ namespace api.Services.FileHierarchy
 				.GetById(folderId)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-			if (folder == null) throw new HierarchyCreationException(HierarchyCreationExceptionReasonCode.FolderDoesntExist);
+			if (folder == null) throw new ApiException(ApiExceptionCode.NotFound, "Folder not found.");
 
 			string fileNameOnDisk = GenerateFileName();
 
@@ -67,7 +67,7 @@ namespace api.Services.FileHierarchy
 			FolderDTO dto = FolderDTO.GetDTO(createdFolder, Enumerable.Empty<Folder>());
 			return dto;
 		}
-		public async Task CreateRootFolder(Entities.User.User user)
+		public async Task CreateRootFolder(User user)
 		{
 			string folderNameOnDisk = GenerateFileName();
 
@@ -110,25 +110,20 @@ namespace api.Services.FileHierarchy
 		}
 		private async Task<Folder> GetRootFolder(Guid userId)
 		{
-			Entities.User.User? user = await _UoW.UserRepository
+			User? user = await _UoW.UserRepository
 				.GetById(userId)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-			if (user == null) throw new HierarchyCreationException(HierarchyCreationExceptionReasonCode.UserDoesntExist);
-			Folder? folder = await _UoW.FolderRepository
-				.GetById(user.RootFolderId)
-				.AsNoTracking()
-				.FirstOrDefaultAsync();
-			if (folder == null) throw new HierarchyCreationException(HierarchyCreationExceptionReasonCode.FolderDoesntExist);
-			return folder;
+			if (user == null) throw new ApiException(ApiExceptionCode.NotFound, "User not found.");
+			return await GetRootFolder(user);
 		}
-		private async Task<Folder> GetRootFolder(Entities.User.User user)
+		private async Task<Folder> GetRootFolder(User user)
 		{
 			Folder? folder = await _UoW.FolderRepository
 				.GetById(user.RootFolderId)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-			if (folder == null) throw new HierarchyCreationException(HierarchyCreationExceptionReasonCode.FolderDoesntExist);
+			if (folder == null) throw new ApiException(ApiExceptionCode.NotFound, "Root folder not found.");
 			return folder;
 		}
 	}

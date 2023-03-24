@@ -1,10 +1,10 @@
-﻿using api.Entities.FileHierarchy;
-using api.Entities.User;
-using api.Infrastructure.Exceptions.Retrieving;
+﻿using api.Entities.FileHierarchyNS;
+using api.Entities.UserNS;
+using api.Infrastructure.Exceptions;
 using api.Repositories.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
-namespace api.Services.FileHierarchy
+namespace api.Services.FileHierarchyServicesNS
 {
 	public class FolderRetrievalService
 	{
@@ -17,18 +17,18 @@ namespace api.Services.FileHierarchy
 
 		public async Task<FolderDTO> GetRootFolderDTO(Guid userId)
 		{
-			Entities.User.User? user = await _UoW.UserRepository
+			User? user = await _UoW.UserRepository
 				.GetById(userId)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-			if (user == null) throw new RetrievingException(RetrievingExceptionReasonCode.UserDoesntExist);
+			if (user == null) throw new ApiException(ApiExceptionCode.NotFound, "User not found.");
 
 			Folder? root = await _UoW.FolderRepository
 				.GetById(user.RootFolderId)
 				.Include(x => x.Files)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-			if (root == null) throw new RetrievingException(RetrievingExceptionReasonCode.FolderDoesntExist);
+			if (root == null) throw new ApiException(ApiExceptionCode.NotFound, "Root folder not found.");
 
 			IEnumerable<Folder> childs = await GetFolderChilds(userId, root.Id);
 
@@ -37,18 +37,18 @@ namespace api.Services.FileHierarchy
 		}
 		public async Task<FolderDTO> GetFolderDTOById(Guid userId, Guid folderId)
 		{
-			Entities.User.User? user = await _UoW.UserRepository
+			User? user = await _UoW.UserRepository
 				.GetById(userId)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-			if (user == null) throw new RetrievingException(RetrievingExceptionReasonCode.UserDoesntExist);
+			if (user == null) throw new ApiException(ApiExceptionCode.NotFound, "User not found.");
 
 			Folder? folder = await _UoW.FolderRepository
 				.GetById(folderId)
 				.Include(x => x.Files)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-			if (folder == null) throw new RetrievingException(RetrievingExceptionReasonCode.FolderDoesntExist);
+			if (folder == null) throw new ApiException(ApiExceptionCode.NotFound, "Folder not found.");
 			if (folder.UserId != user.Id) throw new NotImplementedException();
 
 			IEnumerable<Folder> childs = await GetFolderChilds(userId, folder.Id);

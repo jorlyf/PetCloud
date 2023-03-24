@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace api.Services.Authorization
+namespace api.Services.AuthorizationServicesNS
 {
 	public class HashService
 	{

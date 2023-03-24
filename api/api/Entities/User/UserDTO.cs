@@ -1,4 +1,4 @@
-﻿namespace api.Entities.User
+﻿namespace api.Entities.UserNS
 {
 	public class UserDTO
 	{

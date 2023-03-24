@@ -1,8 +1,14 @@
 import * as React from "react";
+import { updateTxtFileContent } from "@redux/slices/openedFile";
 import useAppSelector from "@hooks/useAppSelector";
+import useAppDispatch from "@hooks/useAppDispatch";
 
 const useTxtEditor = () => {
+  const dispatch = useAppDispatch();
+
   const [text, setText] = React.useState<string>("");
+
+  const fileId = useAppSelector(state => state.file.openedFileId);
 
   const fileLoaded = useAppSelector(state => state.openedFile.loaded);
   const fileContent = useAppSelector(state => state.openedFile.content);
@@ -11,9 +17,9 @@ const useTxtEditor = () => {
     setText(e.target.value);
   }
 
-  const handleSaveText = () => {
-    
-  }
+  const handleSaveText = React.useCallback(() => {
+    dispatch(updateTxtFileContent({ fileId, content: text }));
+  }, [text]);
 
   React.useEffect(() => {
     if (!fileLoaded) return;
@@ -24,7 +30,8 @@ const useTxtEditor = () => {
 
   return {
     text,
-    setText: handleSetText
+    setText: handleSetText,
+    handleSaveText
   }
 }
 export default useTxtEditor;

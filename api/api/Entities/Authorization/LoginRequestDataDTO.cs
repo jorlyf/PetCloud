@@ -1,4 +1,4 @@
-﻿namespace api.Entities.Authorization
+﻿namespace api.Entities.AuthorizationNS
 {
 	public class LoginRequestDataDTO
 	{

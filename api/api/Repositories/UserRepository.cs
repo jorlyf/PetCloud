@@ -1,5 +1,5 @@
 ﻿using api.DbContexts;
-using api.Entities.User;
+using api.Entities.UserNS;
 using api.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 

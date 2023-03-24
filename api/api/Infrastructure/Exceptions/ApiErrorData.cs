@@ -4,13 +4,13 @@ namespace api.Infrastructure.Exceptions
 {
 	public struct ApiErrorData
 	{
-		public string Type { get; set; }
 		public int Code { get; set; }
+		public string Message { get; set; }
 
-		public ApiErrorData(IApiException exception)
+		public ApiErrorData(ApiException exception)
 		{
-			Type = exception.Type;
-			Code = exception.Code;
+			Code = (int)exception.Code;
+			Message = exception.Message;
 		}
 
 		public override string ToString()

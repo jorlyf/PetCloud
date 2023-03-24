@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace api.Entities.User
+namespace api.Entities.UserNS
 {
 	[Index(nameof(Login), IsUnique = true)]
 	public class User : IEntity

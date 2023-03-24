@@ -1,5 +1,5 @@
 ﻿using api.DbContexts;
-using api.Entities.FileHierarchy;
+using api.Entities.FileHierarchyNS;
 using api.Repositories.Base;
 
 namespace api.Repositories

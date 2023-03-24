@@ -1,5 +1,5 @@
-﻿using api.Entities.Authorization;
-using api.Services.Authorization;
+﻿using api.Entities.AuthorizationNS;
+using api.Services.AuthorizationServicesNS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

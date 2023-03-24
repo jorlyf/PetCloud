@@ -1,6 +1,6 @@
-﻿using api.Entities.User;
+﻿using api.Entities.UserNS;
 using api.Infrastructure.Utils;
-using api.Services.User;
+using api.Services.UserServiceNS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

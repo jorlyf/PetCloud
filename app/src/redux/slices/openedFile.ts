@@ -1,6 +1,7 @@
 import store from "@redux/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import FileRetrievalService from "@services/FileRetrievalService/FileRetrievalService";
+import FileUpdateService from "@services/FileUpdateService/FileUpdateService";
 
 export const loadFileContent = createAsyncThunk<void, string>(
   "openedFile/loadFileContent",
@@ -14,10 +15,10 @@ export const loadFileContent = createAsyncThunk<void, string>(
   }
 )
 
-export const saveFileContent = createAsyncThunk<void, string>(
-  "openedFile/saveFileContent",
-  async (content) => {
-    
+export const updateTxtFileContent = createAsyncThunk<void, { fileId: string, content: string }>(
+  "openedFile/updateTxtFileContent",
+  async ({ fileId, content }) => {
+    await FileUpdateService.UpdateTxtFileContent(fileId, content);
   }
 )
 

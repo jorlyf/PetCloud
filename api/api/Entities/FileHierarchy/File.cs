@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace api.Entities.FileHierarchy
+namespace api.Entities.FileHierarchyNS
 {
 	public enum FileType : byte
 	{

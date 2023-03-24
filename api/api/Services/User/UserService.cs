@@ -1,9 +1,9 @@
-﻿using api.Entities.User;
-using api.Infrastructure.Exceptions.User;
+﻿using api.Entities.UserNS;
+using api.Infrastructure.Exceptions;
 using api.Repositories.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
-namespace api.Services.User
+namespace api.Services.UserServiceNS
 {
 	public class UserService
 	{
@@ -15,11 +15,11 @@ namespace api.Services.User
 
 		public async Task<UserDTO> GetUserDTOAsync(Guid userId)
 		{
-			Entities.User.User? user = await _UoW.UserRepository
+			User? user = await _UoW.UserRepository
 				.GetById(userId)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-			if (user == null) throw new UserException(UserExceptionReasonCode.UserDoesntExist);
+			if (user == null) throw new ApiException(ApiExceptionCode.NotFound, "User not found.");
 
 			UserDTO dto = UserDTO.GetDTO(user);
 			return dto;
