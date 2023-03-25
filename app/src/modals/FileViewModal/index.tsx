@@ -11,7 +11,8 @@ const FileViewModal: React.FC = () => {
   const {
     fileType,
     handleCloseFile,
-    fileLoaded
+    fileLoaded,
+    fileName
   } = useFileViewModal();
 
   const divRef = React.useRef(null);
@@ -28,6 +29,7 @@ const FileViewModal: React.FC = () => {
 
   return (
     <>
+      <span className={styles.FileName}>{fileName}</span>
       <div ref={divRef} className={styles.FileViewModal}>
         {fileLoaded && getChildComponent()}
       </div>

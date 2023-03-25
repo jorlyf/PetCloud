@@ -13,9 +13,9 @@ export enum RoutingURL {
 const Routing: React.FC = () => {
   return (
     <Routes>
-      <Route element={<Home />} path="/" />
+      <Route element={<Home />} path={RoutingURL.home} />
       <Route element={<Auth />} path={RoutingURL.authorization} />
-      {/* <Route element={<Profile />} path="/profile" /> */}
+      {/* <Route element={<Profile />} path={RoutingURL.profile} /> */}
       <Route element={<NotFound />} path="*" />
     </Routes>
   )

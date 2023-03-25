@@ -19,7 +19,7 @@ const Auth: React.FC = () => {
     handleChangeMode
   } = useAuthPage();
 
-  if (!wasInitLoginAttempt) {
+  if (isAuthorized || !wasInitLoginAttempt) {
     return <div></div>
   }
 

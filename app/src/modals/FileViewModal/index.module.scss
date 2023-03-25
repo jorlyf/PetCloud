@@ -9,10 +9,20 @@
   background-color: aliceblue;
 }
 
+.FileName {
+  position : fixed;
+  top      : 0px;
+  left     : 50%;
+  transform: translate(-50%, 0);
+  z-index  : 102;
+  color    : white;
+  font-size: 24px;
+}
+
 .Overlay {
   position        : fixed;
-  top             : 0;
-  left            : 0;
+  top             : 0px;
+  left            : 0px;
   width           : 100vw;
   height          : 100vh;
   background-color: rgba(0, 0, 0, 0.8);

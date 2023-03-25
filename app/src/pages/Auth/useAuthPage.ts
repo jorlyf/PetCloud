@@ -3,7 +3,6 @@ import { useNavigate } from "react-router";
 import { login, register } from "@redux/slices/auth";
 import useAppDispatch from "@hooks/useAppDispatch";
 import useAppSelector from "@hooks/useAppSelector";
-import LoginDataDTO from "@entities/auth/dtos/LoginDataDTO";
 
 export enum AuthMode {
   login,

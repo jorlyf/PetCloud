@@ -1,6 +1,7 @@
 import * as React from "react";
 import useFileContextMenu from "./useFileContextMenu";
 import useOutsideClick from "@hooks/useOutsideClick";
+import DropDownList, { DropDownListElement } from "@components/DropDownList";
 import Vector2 from "@entities/common/Vector2";
 
 import styles from "./index.module.scss";
@@ -19,17 +20,24 @@ const FileContextMenu: React.FC<IFileContextMenuProps> = ({ position, handleClos
 
   useOutsideClick(handleClose, divRef);
 
+  const items: DropDownListElement[] = [
+    {
+      onClick: handleOpenFile,
+      label: "Открыть"
+    },
+    {
+      label: "Переименовать"
+    },
+    {
+      label: "Удалить"
+    }
+  ];
+
   return (
     <div ref={divRef} className={styles.FileContextMenu} style={{ left: position.x, top: position.y }}>
-      <div onClick={() => handleOpenFile()} className={styles.Item}>
-        <span>Открыть</span>
-      </div>
-      <div className={styles.Item}>
-        <span>Переименовать</span>
-      </div>
-      <div className={styles.Item}>
-        <span>Удалить</span>
-      </div>
+      <DropDownList
+        items={items}
+      />
     </div>
   )
 }

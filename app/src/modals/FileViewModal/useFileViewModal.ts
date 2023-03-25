@@ -33,7 +33,8 @@ const useFileViewModal = () => {
   return {
     fileType,
     handleCloseFile,
-    fileLoaded
+    fileLoaded,
+    fileName: openedFile?.name
   }
 }
 export default useFileViewModal;
