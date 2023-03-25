@@ -18,7 +18,8 @@
       "@modals/*": ["src/modals/*"],   
       "@components/*": ["src/components/*"],
       "@entities/*": ["src/entities/*"],
-      "@helpers/*": ["src/helpers/*"]
+      "@helpers/*": ["src/helpers/*"],
+      "@notification/*": ["src/notification/*"]
     }
   }
 }

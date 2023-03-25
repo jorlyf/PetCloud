@@ -36,7 +36,8 @@ module.exports = {
       "@modals": path.resolve(__dirname, "src", "modals"),
       "@components": path.resolve(__dirname, "src", "components"),
       "@entities": path.resolve(__dirname, "src", "entities"),
-      "@helpers": path.resolve(__dirname, "src", "helpers")
+      "@helpers": path.resolve(__dirname, "src", "helpers"),
+      "@notification": path.resolve(__dirname, "src", "notification")
     }
   },
   module: {

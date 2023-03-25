@@ -4,6 +4,7 @@ import RegistrationService from "@services/RegistrationService";
 import LocalStorageService from "@services/LocalStorageService";
 import LoginDataDTO from "@entities/auth/dtos/LoginDataDTO";
 import LoginResponseDTO from "@entities/auth/dtos/LoginResponseDTO";
+import { NotificationService } from "@notification/NotificationService";
 
 export const login = createAsyncThunk<LoginResponseDTO, LoginDataDTO>(
   "auth/login",
@@ -55,6 +56,8 @@ const authSlice = createSlice({
 
       state.token = null;
       LocalStorageService.clearToken();
+
+      window.location.reload();
     },
     setWasInitAuthAttempt(state, action: PayloadAction<boolean>) {
       state.wasInitLoginAttempt = action.payload;
@@ -79,6 +82,7 @@ const authSlice = createSlice({
         state.isAuthorized = false;
 
         state.token = null;
+        NotificationService.add("Не удалось войти в аккаунт", "bottom-right", "warning");
       })
   }
 });

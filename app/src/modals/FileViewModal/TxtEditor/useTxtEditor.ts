@@ -6,6 +6,7 @@ import useAppDispatch from "@hooks/useAppDispatch";
 const useTxtEditor = () => {
   const dispatch = useAppDispatch();
 
+  const [serverText, setServerText] = React.useState<string>("");
   const [text, setText] = React.useState<string>("");
 
   const fileId = useAppSelector(state => state.file.openedFileId);
@@ -18,13 +19,16 @@ const useTxtEditor = () => {
   }
 
   const handleSaveText = React.useCallback(() => {
+    if (text === serverText) return; // not changed
     dispatch(updateTxtFileContent({ fileId, content: text }));
-  }, [text]);
+    setServerText(text);
+  }, [text, serverText]);
 
   React.useEffect(() => {
     if (!fileLoaded) return;
     const decoder = new TextDecoder("utf-8");
     const result = decoder.decode(new Uint8Array(fileContent));
+    setServerText(result);
     setText(result);
   }, [fileLoaded, fileContent]);
 

@@ -6,6 +6,7 @@ import FileModel from "@entities/file/FileModel";
 import { submitFolderCreation } from "./createFolder";
 import { submitFileCreation } from "./createFile";
 import store from "@redux/store";
+import { NotificationService } from "@notification/NotificationService";
 
 export const retrieveRootFolder = createAsyncThunk<{ root: FolderModel, login: string }>(
   "file/retrieveRootFolder",
@@ -173,6 +174,7 @@ const fileSlice = createSlice({
           type: "file/addChildFolder"
         }
         fileSlice.caseReducers.addChildFolder(state, addChildAction);
+        NotificationService.add("Папка успешно создана", "bottom-right", "success");
       })
       .addCase(submitFileCreation.fulfilled, (state, action) => {
         const addChildAction: PayloadAction<{ parentId: string, child: FileModel }> = {
@@ -183,6 +185,7 @@ const fileSlice = createSlice({
           type: "file/addChildFile"
         }
         fileSlice.caseReducers.addChildFile(state, addChildAction);
+        NotificationService.add("Файл успешно создан", "bottom-right", "success");
       })
       .addCase(retrieveFolder.fulfilled, (state, action) => {
         const updateAction: PayloadAction<FolderModel> = {

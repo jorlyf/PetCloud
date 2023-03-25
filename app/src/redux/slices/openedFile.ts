@@ -1,8 +1,8 @@
 import store from "@redux/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Store as NotificationStore } from "react-notifications-component";
 import FileRetrievalService from "@services/FileRetrievalService/FileRetrievalService";
 import FileUpdateService from "@services/FileUpdateService/FileUpdateService";
+import { NotificationService } from "@notification/NotificationService";
 
 export const loadFileContent = createAsyncThunk<void, string>(
   "openedFile/loadFileContent",
@@ -49,15 +49,7 @@ const openedFileSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(updateTxtFileContent.fulfilled, () => {
-        NotificationStore.addNotification({
-          container: "bottom-right",
-          message: "Сохранено",
-          type: "success",
-          dismiss: {
-            duration: 2000,
-            onScreen: true
-          }
-        });
+        NotificationService.add("Сохранено", "bottom-right", "success");
       })
   }
 });
