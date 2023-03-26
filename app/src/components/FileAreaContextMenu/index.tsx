@@ -15,12 +15,17 @@ const FileAreaContextMenu: React.FC<IFileAreaContextMenuProps> = ({ position, ha
   const divRef = React.useRef(null);
 
   const {
+    handleUploadFiles,
     handleCreateFile,
     handleCreateFolder
   } = useFileAreaContextMenu({ handleClose: handleClose });
   useOutsideClick(handleClose, divRef);
 
   const items: DropDownListElement[] = [
+    {
+      onClick: handleUploadFiles,
+      label: "Загрузить файлы"
+    },
     {
       onClick: handleCreateFile,
       iconSrc: "/images/File.png",

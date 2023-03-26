@@ -1,11 +1,12 @@
+import store from "@redux/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import FolderRetrievalService from "@services/FolderRetrievalService/FolderRetrievalService";
+import FileUploadService from "@services/FileUploadService/FileUploadService";
 import FolderModel from "@entities/file/FolderModel";
 import Vector2 from "@entities/common/Vector2";
 import FileModel from "@entities/file/FileModel";
 import { submitFolderCreation } from "./createFolder";
 import { submitFileCreation } from "./createFile";
-import store from "@redux/store";
 import { NotificationService } from "@notification/NotificationService";
 
 export const retrieveRootFolder = createAsyncThunk<{ root: FolderModel, login: string }>(
@@ -24,6 +25,14 @@ export const retrieveFolder = createAsyncThunk<FolderModel, string>(
     return folder;
   }
 );
+
+export const uploadFiles = createAsyncThunk<void, { folderId: string, files: File[] }>(
+  "file/uploadFiles",
+  async ({ folderId, files }) => {
+    await FileUploadService.uploadFiles(folderId, files);
+    await store.dispatch(retrieveFolder(folderId));
+  }
+)
 
 export const findFolderById = (root: FolderModel, id: string): FolderModel | null => {
   if (root === null) return null;
@@ -135,7 +144,18 @@ const fileSlice = createSlice({
       } else {
         localFolder.name = action.payload.name;
         const parent = findFolderById(state.rootFolder, action.payload.parentId);
-        if (parent) localFolder.path = `${parent.path}\\${action.payload.name}`;
+        if (parent) localFolder.path = `${parent.path}\\${localFolder.name}`;
+
+        const files = action.payload.files;
+        for (let i = 0; i < files.length; i++) {
+          const localFile = findFileById(state.rootFolder, files[i].id);
+          if (localFile) {
+            localFile.name = files[i].name;
+            localFile.type = files[i].type;
+          } else {
+            localFolder.files.push(files[i]);
+          }
+        }
 
         for (let i = 0; i < action.payload.childFolders.length; i++) {
           const serverChildFolder = action.payload.childFolders[i];
@@ -193,6 +213,12 @@ const fileSlice = createSlice({
           type: "file/updateFolder"
         }
         fileSlice.caseReducers.updateFolder(state, updateAction);
+      })
+      .addCase(uploadFiles.fulfilled, (state, action) => {
+        
+      })
+      .addCase(uploadFiles.rejected, (state) => {
+
       })
   },
 });

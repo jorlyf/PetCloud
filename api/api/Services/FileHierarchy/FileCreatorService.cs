@@ -8,5 +8,14 @@
 		{
 			File.Create(filePath).Close();
 		}
+
+		public async Task SaveFileAsync(IFormFile file, string path)
+		{
+			using (FileStream stream = new FileStream(path, FileMode.CreateNew))
+			{
+				await file.CopyToAsync(stream);
+				stream.Flush();
+			}
+		}
 	}
 }

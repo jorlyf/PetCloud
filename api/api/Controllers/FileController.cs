@@ -1,5 +1,6 @@
 ﻿using api.Entities.FileHierarchyNS;
 using api.Infrastructure.Utils;
+using api.Services.FileHierarchy;
 using api.Services.FileHierarchyServicesNS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,14 +15,17 @@ namespace api.Controllers
 	{
 		private readonly FileHierarchyCreationService _fileHierarchyCreationService;
 		private readonly FileEditorService _fileEditorService;
+		private readonly FileUploaderService _fileUploaderService;
 
 		public FileController(
 			FileHierarchyCreationService fileHierarchyCreationService,
-			FileEditorService fileEditorService
+			FileEditorService fileEditorService,
+			FileUploaderService fileUploaderService
 			)
 		{
 			_fileHierarchyCreationService = fileHierarchyCreationService;
 			_fileEditorService = fileEditorService;
+			_fileUploaderService = fileUploaderService;
 		}
 
 		[HttpPost]
@@ -53,6 +57,19 @@ namespace api.Controllers
 			}
 			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
 			await _fileEditorService.UpdateTextFile(userId, fileId, content);
+			return Ok();
+		}
+
+		[RequestFormLimits(ValueLengthLimit = int.MaxValue,
+			MultipartBodyLengthLimit = long.MaxValue)]
+		[DisableRequestSizeLimit]
+		[HttpPost]
+		[Route("UploadFiles")]
+		public async Task<ActionResult> UploadFiles(Guid folderId, [FromForm] List<IFormFile> files)
+		{
+			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
+			await _fileUploaderService.UploadFiles(userId, folderId, files);
+			Console.WriteLine("файлы загружены");
 			return Ok();
 		}
 	}

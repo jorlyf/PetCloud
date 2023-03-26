@@ -1,5 +1,7 @@
 .Home {
   display              : grid;
+  height               : 100%;
   grid-template-columns: 300px 1fr;
   column-gap           : 20px;
+  overflow-y           : auto;
 }

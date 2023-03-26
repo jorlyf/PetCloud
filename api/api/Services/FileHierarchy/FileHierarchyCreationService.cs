@@ -26,7 +26,7 @@ namespace api.Services.FileHierarchyServicesNS
 				.FirstOrDefaultAsync();
 			if (folder == null) throw new ApiException(ApiExceptionCode.NotFound, "Folder not found.");
 
-			string fileNameOnDisk = GenerateFileName();
+			string fileNameOnDisk = FileNameAnalyzer.GenerateFileName();
 
 			Folder rootFolder = await GetRootFolder(userId);
 
@@ -36,7 +36,7 @@ namespace api.Services.FileHierarchyServicesNS
 				UserId = userId,
 				Name = fileName,
 				Path = $"{rootFolder.Path}\\{fileNameOnDisk}",
-				Type = AnalyzeFileExtension(fileName)
+				Type = FileNameAnalyzer.AnalyzeExtension(fileName)
 			};
 			await _UoW.FileRepository.AddAsync(file);
 			await _UoW.FileRepository.SaveAsync();
@@ -58,7 +58,7 @@ namespace api.Services.FileHierarchyServicesNS
 				ParentId = parentId,
 				UserId = userId,
 				Name = folderName,
-				Path = $"{rootFolder.Path}\\{GenerateFileName()}",
+				Path = $"{rootFolder.Path}\\{FileNameAnalyzer.GenerateFileName()}",
 				Files = Enumerable.Empty<File>()
 			};
 			await _UoW.FolderRepository.AddAsync(createdFolder);
@@ -69,7 +69,7 @@ namespace api.Services.FileHierarchyServicesNS
 		}
 		public async Task CreateRootFolder(User user)
 		{
-			string folderNameOnDisk = GenerateFileName();
+			string folderNameOnDisk = FileNameAnalyzer.GenerateFileName();
 
 			Folder createdFolder = new()
 			{
@@ -85,29 +85,7 @@ namespace api.Services.FileHierarchyServicesNS
 
 			Directory.CreateDirectory($"{AppDirectories.CloudData}\\{folderNameOnDisk}");
 		}
-		private string GenerateFileName()
-		{
-			return Guid.NewGuid().ToString();
-		}
-		private FileType AnalyzeFileExtension(string fileName)
-		{
-			string? extension = Path.GetExtension(fileName);
-			if (extension == null) { return FileType.Undefined; }
-
-			switch (extension)
-			{
-				case ".png":
-				case ".jpg":
-				case ".jpeg":
-					return FileType.Picture;
-				case ".mp4":
-					return FileType.Video;
-				case ".txt":
-					return FileType.Text;
-
-				default: return FileType.Undefined;
-			}
-		}
+	
 		private async Task<Folder> GetRootFolder(Guid userId)
 		{
 			User? user = await _UoW.UserRepository

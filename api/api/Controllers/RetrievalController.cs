@@ -33,6 +33,7 @@ namespace api.Controllers
 		[Route("GetFolder")]
 		public async Task<ActionResult<FolderDTO>> GetFolder(Guid folderId)
 		{
+			Console.WriteLine("папка запрошена");
 			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
 			FolderDTO dto = await _folderRetrievalService.GetFolderDTOById(userId, folderId);
 			return Ok(dto);
