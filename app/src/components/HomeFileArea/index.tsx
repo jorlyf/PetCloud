@@ -3,6 +3,7 @@ import useHomeFileArea from "./useHomeFileArea";
 import FileList from "@components/FileList";
 
 import styles from "./index.module.scss";
+import HomeProgressBar from "@components/HomeProgressBar";
 
 const HomeFileArea: React.FC = () => {
   const {
@@ -16,11 +17,10 @@ const HomeFileArea: React.FC = () => {
   }
 
   return (
-    <>
       <div className={styles.HomeFileArea}>
         <FileList folder={openedFolder} />
+        <HomeProgressBar />
       </div>
-    </>
   )
 }
 export default HomeFileArea;

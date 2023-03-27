@@ -18,9 +18,9 @@ namespace api.Services.FileHierarchyServicesNS
 		public async Task<FileStream> GetFileStream(Guid userId, Guid fileId)
 		{
 			User? user = await _UoW.UserRepository
-					.GetById(userId)
-					.AsNoTracking()
-					.FirstOrDefaultAsync();
+				.GetById(userId)
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
 			if (user == null) throw new ApiException(ApiExceptionCode.NotFound, "User not found.");
 
 			File? file = await _UoW.FileRepository
@@ -28,7 +28,7 @@ namespace api.Services.FileHierarchyServicesNS
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
 			if (file == null) throw new ApiException(ApiExceptionCode.NotFound, "File not found.");
-			if (file.UserId != userId) throw new NotImplementedException();
+			if (file.UserId != user.Id) throw new NotImplementedException();
 
 			FileStream stream = new FileStream($"{AppDirectories.CloudData}\\{file.Path}", FileMode.Open, FileAccess.Read, FileShare.Read);
 			return stream;

@@ -1,0 +1,42 @@
+.HomeProgressBar {
+  border-top: 1px solid var(--dark-blue-color);
+  box-sizing: border-box;
+
+  .Progress {
+    display    : flex;
+    align-items: center;
+    height     : 100%;
+    width      : max-content;
+    margin-left: 30px;
+
+    progress {
+      margin-left        : 10px;
+      height             : 18px;
+      color              : var(--cloud-logo-color);
+      background-color   : white;
+      // border          : 1px solid var(--dark-blue-color);
+      // border-radius   : 10px;
+    }
+
+    /* background: */
+    progress::-webkit-progress-bar {
+      background-color: white;
+      width           : 100%;
+      border          : 1px solid var(--dark-blue-color);
+      border-radius   : 10px;
+    }
+
+    /* value: */
+    progress::-webkit-progress-value {
+      background-color: var(--cloud-logo-color) !important;
+      border          : 1px solid var(--dark-blue-color);
+      border-radius   : 10px;
+    }
+
+    progress::-moz-progress-bar {
+      background-color: var(--cloud-logo-color) !important;
+      border          : 1px solid var(--dark-blue-color);
+      border-radius   : 10px;
+    }
+  }
+}

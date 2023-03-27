@@ -6,6 +6,7 @@ import user from "./slices/user";
 import createFolder from "./slices/createFolder"
 import createFile from "./slices/createFile";
 import openedFile from "./slices/openedFile";
+import fileUpload from "./slices/fileUpload";
 
 const store = configureStore({
   reducer: {
@@ -14,7 +15,8 @@ const store = configureStore({
     user,
     createFolder,
     createFile,
-    openedFile
+    openedFile,
+    fileUpload
   }
 });
 

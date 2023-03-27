@@ -26,14 +26,6 @@ export const retrieveFolder = createAsyncThunk<FolderModel, string>(
   }
 );
 
-export const uploadFiles = createAsyncThunk<void, { folderId: string, files: File[] }>(
-  "file/uploadFiles",
-  async ({ folderId, files }) => {
-    await FileUploadService.uploadFiles(folderId, files);
-    await store.dispatch(retrieveFolder(folderId));
-  }
-)
-
 export const findFolderById = (root: FolderModel, id: string): FolderModel | null => {
   if (root === null) return null;
   if (root.id === id) return root;
@@ -213,12 +205,6 @@ const fileSlice = createSlice({
           type: "file/updateFolder"
         }
         fileSlice.caseReducers.updateFolder(state, updateAction);
-      })
-      .addCase(uploadFiles.fulfilled, (state, action) => {
-        
-      })
-      .addCase(uploadFiles.rejected, (state) => {
-
       })
   },
 });

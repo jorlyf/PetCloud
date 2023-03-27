@@ -69,7 +69,6 @@ namespace api.Controllers
 		{
 			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
 			await _fileUploaderService.UploadFiles(userId, folderId, files);
-			Console.WriteLine("файлы загружены");
 			return Ok();
 		}
 	}

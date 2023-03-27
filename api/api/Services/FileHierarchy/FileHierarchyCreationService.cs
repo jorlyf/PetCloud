@@ -58,7 +58,7 @@ namespace api.Services.FileHierarchyServicesNS
 				ParentId = parentId,
 				UserId = userId,
 				Name = folderName,
-				Path = $"{rootFolder.Path}\\{FileNameAnalyzer.GenerateFileName()}",
+				Path = rootFolder.Path,
 				Files = Enumerable.Empty<File>()
 			};
 			await _UoW.FolderRepository.AddAsync(createdFolder);
