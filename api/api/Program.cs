@@ -51,6 +51,7 @@ builder.Services.AddScoped<AuthorizationService>();
 builder.Services.AddScoped<FileHierarchyCreationService>();
 builder.Services.AddScoped<FileEditorService>();
 builder.Services.AddScoped<FileUploaderService>();
+builder.Services.AddScoped<FileDownloaderService>();
 builder.Services.AddScoped<FolderRetrievalService>();
 builder.Services.AddScoped<FileRetrievalService>();
 builder.Services.AddScoped<UserService>();

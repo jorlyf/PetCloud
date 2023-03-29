@@ -1,7 +1,9 @@
 import * as React from "react";
+import { downloadFile } from "@redux/slices/downloader";
 import { closeFileContextMenu, findFileById, openFile } from "@redux/slices/file";
 import useAppSelector from "@hooks/useAppSelector";
 import useAppDispatch from "@hooks/useAppDispatch";
+import { DropDownListElement } from "@components/DropDownList";
 
 const useFileContextMenu = () => {
   const dispatch = useAppDispatch();
@@ -19,8 +21,31 @@ const useFileContextMenu = () => {
     dispatch(closeFileContextMenu());
   }
 
+  const handleSaveFile = () => {
+    if (selectedFile !== null)
+      dispatch(downloadFile(selectedFile.id));
+    dispatch(closeFileContextMenu());
+  }
+
+  const menuItems: DropDownListElement[] = [
+    {
+      onClick: handleOpenFile,
+      label: "Открыть"
+    },
+    {
+      onClick: handleSaveFile,
+      label: "Скачать"
+    },
+    {
+      label: "Переименовать"
+    },
+    {
+      label: "Удалить"
+    }
+  ];
+
   return {
-    handleOpenFile
+    menuItems
   }
 }
 export default useFileContextMenu;

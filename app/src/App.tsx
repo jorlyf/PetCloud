@@ -1,8 +1,8 @@
 import * as React from "react";
+import Routing from "./Routing";
 import useAuthorization from "@hooks/useAuthorization";
 import Header from "@components/Header/index";
 import Modals from "@modals/Modals";
-import Routing from "./Routing";
 
 import styles from "./App.module.scss";
 
