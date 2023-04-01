@@ -1,5 +1,5 @@
 import * as React from "react";
-import { downloadFile } from "@redux/slices/downloader";
+import { downloadFile, setDownloadItemPromise } from "@redux/slices/downloader";
 import { closeFileContextMenu, findFileById, openFile } from "@redux/slices/file";
 import useAppSelector from "@hooks/useAppSelector";
 import useAppDispatch from "@hooks/useAppDispatch";
@@ -22,8 +22,10 @@ const useFileContextMenu = () => {
   }
 
   const handleSaveFile = () => {
-    if (selectedFile !== null)
-      dispatch(downloadFile(selectedFile.id));
+    if (selectedFile !== null) {
+      const promise = dispatch(downloadFile(selectedFile.id));
+      dispatch(setDownloadItemPromise({ id: selectedFile.id, promise }));
+    }
     dispatch(closeFileContextMenu());
   }
 

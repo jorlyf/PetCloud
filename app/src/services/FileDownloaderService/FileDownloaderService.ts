@@ -1,10 +1,14 @@
 import $api from "@http/api";
-import { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig, GenericAbortSignal } from "axios";
 
 export default class FileDownloaderService {
-  static async saveFile(fileId: string, fileName: string) {
+  static async saveFile(fileId: string, fileName: string, onProgress: (progress: number) => void, signal: GenericAbortSignal) {
     const config: AxiosRequestConfig = {
-      responseType: "blob"
+      responseType: "blob",
+      onDownloadProgress: (e) => {
+        onProgress(e.progress);
+      },
+      signal
     }
     const resp = await $api.get<Blob>(`/Download/DownloadFile?fileId=${fileId}`, config);
 
