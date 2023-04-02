@@ -20,11 +20,17 @@ namespace api.Services.FileHierarchyServicesNS
 
 		public async Task<FileDTO> CreateEmptyFile(Guid userId, Guid folderId, string fileName)
 		{
+			if (await _UoW.FileRepository.FileExist(folderId, fileName))
+			{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "File with this name exist."); }
+
 			Folder? folder = await _UoW.FolderRepository
 				.GetById(folderId)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-			if (folder == null) throw new ApiException(ApiExceptionCode.NotFound, "Folder not found.");
+			if (folder == null)
+			{ throw new ApiException(ApiExceptionCode.NotFound, "Folder not found."); }
+			if (folder.UserId != userId)
+			{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "Access denied."); }
 
 			string fileNameOnDisk = FileNameAnalyzer.GenerateFileName();
 
@@ -49,9 +55,15 @@ namespace api.Services.FileHierarchyServicesNS
 		public async Task<FolderDTO> CreateEmptyFolder(Guid userId, Guid parentId, string folderName)
 		{
 			Folder? parentFolder = await _UoW.FolderRepository.GetById(parentId).FirstOrDefaultAsync();
-			if (parentFolder == null) { throw new NotImplementedException(); }
+			if (parentFolder == null)
+			{ throw new ApiException(ApiExceptionCode.NotFound, "Parent folder not found."); }
+			if (parentFolder.UserId != userId)
+			{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "Access denied."); }
 
 			Folder rootFolder = await GetRootFolder(userId);
+
+			if (await _UoW.FolderRepository.FolderExist(parentId, folderName))
+			{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "Folder with this name exist."); }
 
 			Folder createdFolder = new()
 			{
@@ -85,7 +97,7 @@ namespace api.Services.FileHierarchyServicesNS
 
 			Directory.CreateDirectory($"{AppDirectories.CloudData}\\{folderNameOnDisk}");
 		}
-	
+
 		private async Task<Folder> GetRootFolder(Guid userId)
 		{
 			User? user = await _UoW.UserRepository

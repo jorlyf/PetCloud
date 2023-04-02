@@ -1,11 +1,16 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import FileHierarchyCreationService from "@services/FileHierarchyCreationService/FileHierarchyCreationService";
 import FolderModel from "@entities/file/FolderModel";
+import { NotificationService } from "@notification/NotificationService";
 
-export const submitFolderCreation = createAsyncThunk<FolderModel, { parentFolderId: string, folderName: string }>(
+export const submitFolderCreation = createAsyncThunk<FolderModel, { parentFolderId: string, folderName: string }, { rejectValue: string }>(
   "createFolder/submitFolderCreation",
-  async ({ parentFolderId, folderName }) => {
-    return FileHierarchyCreationService.createEmptyFolder(parentFolderId, folderName);
+  async ({ parentFolderId, folderName }, { rejectWithValue }) => {
+    try {
+      return await FileHierarchyCreationService.createEmptyFolder(parentFolderId, folderName);
+    } catch (error) {
+      return rejectWithValue(error.response.data.Message);
+    }
   }
 )
 
@@ -33,7 +38,12 @@ const createFolderSlice = createSlice({
       state.isOpenModal = false;
       state.folderName = "";
     }
-  }
+  },
+  extraReducers: (builder) =>
+    builder
+      .addCase(submitFolderCreation.rejected, (state, action) => {
+        NotificationService.add(action.payload, "bottom-right", "warning");
+      })
 });
 
 export const {

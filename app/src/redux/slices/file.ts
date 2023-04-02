@@ -1,7 +1,6 @@
 import store from "@redux/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import FolderRetrievalService from "@services/FolderRetrievalService/FolderRetrievalService";
-import FileUploadService from "@services/FileUploadService/FileUploadService";
 import FolderModel from "@entities/file/FolderModel";
 import Vector2 from "@entities/common/Vector2";
 import FileModel from "@entities/file/FileModel";

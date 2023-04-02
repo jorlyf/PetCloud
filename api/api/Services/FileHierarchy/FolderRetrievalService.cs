@@ -37,19 +37,15 @@ namespace api.Services.FileHierarchyServicesNS
 		}
 		public async Task<FolderDTO> GetFolderDTOById(Guid userId, Guid folderId)
 		{
-			User? user = await _UoW.UserRepository
-				.GetById(userId)
-				.AsNoTracking()
-				.FirstOrDefaultAsync();
-			if (user == null) throw new ApiException(ApiExceptionCode.NotFound, "User not found.");
-
 			Folder? folder = await _UoW.FolderRepository
 				.GetById(folderId)
 				.Include(x => x.Files)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-			if (folder == null) throw new ApiException(ApiExceptionCode.NotFound, "Folder not found.");
-			if (folder.UserId != user.Id) throw new NotImplementedException();
+			if (folder == null)
+			{ throw new ApiException(ApiExceptionCode.NotFound, "Folder not found."); }
+			if (folder.UserId != userId)
+			{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "Access denied."); }
 
 			IEnumerable<Folder> childs = await GetFolderChilds(userId, folder.Id);
 

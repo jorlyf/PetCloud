@@ -17,18 +17,13 @@ namespace api.Services.FileHierarchy
 
 		public async Task<string> GetPhysicalFilePath(Guid userId, Guid fileId)
 		{
-			User? user = await _UoW.UserRepository
-				.GetById(userId)
-				.AsNoTracking()
-				.FirstOrDefaultAsync();
-			if (user == null) throw new ApiException(ApiExceptionCode.NotFound, "User not found.");
-
 			File? file = await _UoW.FileRepository
 				.GetById(fileId)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
+
 			if (file == null) throw new ApiException(ApiExceptionCode.NotFound, "File not found.");
-			if (file.UserId != user.Id) throw new ApiException(ApiExceptionCode.IncorrectResponseData);
+			if (file.UserId != userId) throw new ApiException(ApiExceptionCode.IncorrectResponseData, "Access denied.");
 
 			return $"{AppDirectories.CloudData}\\{file.Path}";
 		}

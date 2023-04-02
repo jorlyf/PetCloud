@@ -1,6 +1,7 @@
 ﻿using api.DbContexts;
 using api.Entities.FileHierarchyNS;
 using api.Repositories.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Repositories
 {
@@ -11,6 +12,10 @@ namespace api.Repositories
 		public IQueryable<Folder> GetByParentId(Guid userId, Guid parentId) 
 		{
 			return Set.Where(folder => folder.UserId == userId && folder.ParentId == parentId);
+		}
+		public Task<bool> FolderExist(Guid parentFolderId, string folderName)
+		{
+			return Set.AnyAsync(folder => folder.ParentId == parentFolderId && folder.Name == folderName);
 		}
 	}
 }

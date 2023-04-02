@@ -22,23 +22,22 @@ namespace api.Services.FileHierarchy
 
 		public async Task UploadFiles(Guid userId, Guid folderId, List<IFormFile> files)
 		{
-			User? user = await _UoW.UserRepository
-				.GetById(userId)
-				.AsNoTracking()
-				.FirstOrDefaultAsync();
-			if (user == null) { throw new ApiException(ApiExceptionCode.NotFound, "User not found."); }
-
 			Folder? folder = await _UoW.FolderRepository
 				.GetById(folderId)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-			if (folder == null) { throw new ApiException(ApiExceptionCode.NotFound, "Folder not found."); }
-			if (folder.UserId != user.Id) throw new NotImplementedException();
+			if (folder == null)
+			{ throw new ApiException(ApiExceptionCode.NotFound, "Folder not found."); }
+			if (folder.UserId != userId)
+			{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "Access denied."); }
 
 			for (int i = 0; i < files.Count; i++)
 			{
 				IFormFile file = files[i];
 				FileType type = FileNameAnalyzer.AnalyzeExtension(file.FileName);
+
+				if (await _UoW.FileRepository.FileExist(folderId, file.FileName))
+				{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "File with this name exist."); }
 
 				string fileNameOnDisk = FileNameAnalyzer.GenerateFileName();
 
