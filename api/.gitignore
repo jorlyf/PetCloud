@@ -5,6 +5,8 @@ api.sln
 /api/appsettings.json
 /api/appsettings.Development.json
 /api/PetCloud.db
+/api/PetCloud.db-shm
+/api/PetCloud.db-wal
 
 # a folder for user files
 /api/CloudData
