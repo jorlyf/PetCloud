@@ -21,7 +21,7 @@ const useFileContextMenu = () => {
     dispatch(closeFileContextMenu());
   }
 
-  const handleSaveFile = () => {
+  const handleDownloadFile = () => {
     if (selectedFile !== null) {
       const promise = dispatch(downloadFile(selectedFile.id));
       dispatch(setDownloadItemPromise({ id: selectedFile.id, promise }));
@@ -35,7 +35,7 @@ const useFileContextMenu = () => {
       label: "Открыть"
     },
     {
-      onClick: handleSaveFile,
+      onClick: handleDownloadFile,
       label: "Скачать"
     },
     {

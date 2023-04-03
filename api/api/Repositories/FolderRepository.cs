@@ -9,9 +9,9 @@ namespace api.Repositories
 	{
 		public FolderRepository(DataContext context) : base(context) { }
 
-		public IQueryable<Folder> GetByParentId(Guid userId, Guid parentId) 
+		public IQueryable<Folder> GetByParentId(Guid parentId) 
 		{
-			return Set.Where(folder => folder.UserId == userId && folder.ParentId == parentId);
+			return Set.Where(folder => folder.ParentId == parentId);
 		}
 		public Task<bool> FolderExist(Guid parentFolderId, string folderName)
 		{

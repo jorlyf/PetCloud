@@ -17,7 +17,8 @@ const FileAreaContextMenu: React.FC<IFileAreaContextMenuProps> = ({ position, ha
   const {
     handleUploadFiles,
     handleCreateFile,
-    handleCreateFolder
+    handleCreateFolder,
+    handleDownloadFolder
   } = useFileAreaContextMenu({ handleClose: handleClose });
   useOutsideClick(handleClose, divRef);
 
@@ -35,6 +36,10 @@ const FileAreaContextMenu: React.FC<IFileAreaContextMenuProps> = ({ position, ha
       onClick: handleCreateFolder,
       iconSrc: "/images/Folder.png",
       label: "Создать папку"
+    },
+    {
+      onClick: handleDownloadFolder,
+      label: "Скачать папку"
     }
   ];
 

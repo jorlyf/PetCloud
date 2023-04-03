@@ -1,7 +1,7 @@
 import store from "@redux/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { findFileById } from "./file";
-import FileDownloaderService from "@services/FileDownloaderService/FileDownloaderService";
+import { findFileById, findFolderById } from "./file";
+import DownloaderService from "@services/DownloaderService/DownloaderService";
 
 const isExistDownloadItem = (items: IDownloadItem[], id: string): boolean => {
   return items.find(x => x.id === id) !== undefined;
@@ -14,13 +14,13 @@ export const downloadFile = createAsyncThunk<string, string, { rejectValue: stri
     const file = findFileById(fileState.rootFolder, fileId);
     if (!file) return;
 
-    if (isExistDownloadItem(store.getState().downloader.items, fileId)) {
+    if (isExistDownloadItem(store.getState().downloader.items, file.id)) {
       return;
     }
 
     const onProgress = (progress: number) => {
       const action: PayloadAction<{ id: string, progress: number }> = {
-        payload: { id: fileId, progress },
+        payload: { id: file.id, progress },
         type: "downloader/updateDownloadItemProgress"
       }
       store.dispatch(action);
@@ -33,7 +33,7 @@ export const downloadFile = createAsyncThunk<string, string, { rejectValue: stri
     store.dispatch(createDownloadItemAction);
 
     try {
-      await FileDownloaderService.saveFile(file.id, file.name, onProgress, signal);
+      await DownloaderService.saveFile(file.id, file.name, onProgress, signal);
       return file.id;
     } catch (error) {
       return rejectWithValue(file.id);
@@ -41,10 +41,37 @@ export const downloadFile = createAsyncThunk<string, string, { rejectValue: stri
   }
 );
 
-export const downloadFolder = createAsyncThunk<void, string>(
+export const downloadFolder = createAsyncThunk<string, string, { rejectValue: string }>(
   "downloader/downloadItem",
-  async (folderId) => {
+  async (folderId, { rejectWithValue, signal }) => {
+    const fileState = store.getState().file;
+    const folder = findFolderById(fileState.rootFolder, folderId);
+    if (!folder) return;
 
+    if (isExistDownloadItem(store.getState().downloader.items, folder.id)) {
+      return;
+    }
+
+    const onProgress = (progress: number) => {
+      const action: PayloadAction<{ id: string, progress: number }> = {
+        payload: { id: folder.id, progress },
+        type: "downloader/updateDownloadItemProgress"
+      }
+      store.dispatch(action);
+    }
+
+    const createDownloadItemAction: PayloadAction<{ id: string, name: string }> = {
+      payload: { id: folder.id, name: folder.name },
+      type: "downloader/createDownloadItem"
+    }
+    store.dispatch(createDownloadItemAction);
+
+    try {
+      await DownloaderService.saveFolder(folder.id, folder.name, onProgress, signal);
+      return folder.id;
+    } catch (error) {
+      return rejectWithValue(folder.id);
+    }
   }
 );
 

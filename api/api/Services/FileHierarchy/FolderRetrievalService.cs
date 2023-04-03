@@ -56,7 +56,7 @@ namespace api.Services.FileHierarchyServicesNS
 		private async Task<IEnumerable<Folder>> GetFolderChilds(Guid userId, Guid folderId)
 		{
 			return await _UoW.FolderRepository
-				.GetByParentId(userId, folderId)
+				.GetByParentId(folderId)
 				.Include(x => x.Files)
 				.AsNoTracking()
 				.ToListAsync();

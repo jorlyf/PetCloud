@@ -1,7 +1,7 @@
 import $api from "@http/api";
 import { AxiosRequestConfig, GenericAbortSignal } from "axios";
 
-export default class FileDownloaderService {
+export default class DownloaderService {
   static async saveFile(fileId: string, fileName: string, onProgress: (progress: number) => void, signal: GenericAbortSignal) {
     const config: AxiosRequestConfig = {
       responseType: "blob",
@@ -10,6 +10,7 @@ export default class FileDownloaderService {
       },
       signal
     }
+
     const resp = await $api.get<Blob>(`/Download/DownloadFile?fileId=${fileId}`, config);
 
     const linkElem = document.createElement("a");
@@ -20,7 +21,22 @@ export default class FileDownloaderService {
     linkElem.click();
     setTimeout(() => window.URL.revokeObjectURL(url), 1000);
   }
-  static async saveFolder(folderId: string) {
+  static async saveFolder(folderId: string, folderName: string, onProgress: (progress: number) => void, signal: GenericAbortSignal) {
+    const config: AxiosRequestConfig = {
+      responseType: "blob",
+      onDownloadProgress: (e) => {
+        onProgress(e.progress);
+      },
+      signal
+    }
+    const resp = await $api.get<Blob>(`/Download/DownloadFolder?folderId=${folderId}`, config);
 
+    const linkElem = document.createElement("a");
+    const blob = new Blob([resp.data], { type: 'application/zip' });
+    const url = URL.createObjectURL(new Blob([blob]));
+    linkElem.href = url;
+    linkElem.setAttribute("download", `${folderName}.zip`);
+    linkElem.click();
+    setTimeout(() => window.URL.revokeObjectURL(url), 1000);
   }
 }

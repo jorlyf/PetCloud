@@ -2,8 +2,10 @@ import { setIsOpenModal as setIsOpenCreateFolderModal } from "@redux/slices/crea
 import { setIsOpenModal as setIsOpenCreateFileModal } from "@redux/slices/createFile";
 import useAppDispatch from "@hooks/useAppDispatch";
 import useAppSelector from "@hooks/useAppSelector";
+import { downloadFolder, setDownloadItemPromise } from "@redux/slices/downloader";
 import { uploadFiles } from "@redux/slices/fileUpload";
 import { NotificationService } from "@notification/NotificationService";
+import { closeFileAreaContexteMenu } from "@redux/slices/file";
 
 interface IUseFileAreaContextMenuProps {
   handleClose: () => void;
@@ -47,10 +49,18 @@ const useFileAreaContextMenu = ({ handleClose }: IUseFileAreaContextMenuProps) =
     handleClose();
   }
 
+  const handleDownloadFolder = () => {
+    if (openedFolderId === null) return;
+    const promise = dispatch(downloadFolder(openedFolderId));
+    dispatch(setDownloadItemPromise({ id: openedFolderId, promise }));
+    dispatch(closeFileAreaContexteMenu());
+  }
+
   return {
     handleUploadFiles,
     handleCreateFile,
-    handleCreateFolder
+    handleCreateFolder,
+    handleDownloadFolder
   }
 }
 export default useFileAreaContextMenu;

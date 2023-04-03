@@ -10,8 +10,8 @@ namespace api.Controllers
 	[ApiController]
 	public class DownloadController : ControllerBase
 	{
-		private readonly FileDownloaderService _fileDownloaderService;
-		public DownloadController(FileDownloaderService fileDownloaderService)
+		private readonly DownloaderService _fileDownloaderService;
+		public DownloadController(DownloaderService fileDownloaderService)
 		{
 			_fileDownloaderService = fileDownloaderService;
 		}
@@ -23,6 +23,16 @@ namespace api.Controllers
 			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
 			string filePath = await _fileDownloaderService.GetPhysicalFilePath(userId, fileId);
 			return PhysicalFile(filePath, "application/octet-stream");
+		}
+
+		[HttpGet]
+		[Route("DownloadFolder")]
+		public async Task<IActionResult> DownloadFolder(Guid folderId)
+		{
+			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
+			using MemoryStream stream = await _fileDownloaderService.GetFolderStreamToDownload(userId, folderId);
+			GC.Collect(); // optional
+			return File(stream.ToArray(), "application/zip");
 		}
 	}
 }
