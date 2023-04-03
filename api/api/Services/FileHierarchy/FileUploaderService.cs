@@ -27,9 +27,9 @@ namespace api.Services.FileHierarchy
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
 			if (folder == null)
-			{ throw new ApiException(ApiExceptionCode.NotFound, "Folder not found."); }
+			{ throw new ApiException(ApiExceptionCode.FileNotFound); }
 			if (folder.UserId != userId)
-			{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "Access denied."); }
+			{ throw new ApiException(ApiExceptionCode.AccessDenied); }
 
 			for (int i = 0; i < files.Count; i++)
 			{
@@ -37,7 +37,7 @@ namespace api.Services.FileHierarchy
 				FileType type = FileNameAnalyzer.AnalyzeExtension(file.FileName);
 
 				if (await _UoW.FileRepository.FileExist(folderId, file.FileName))
-				{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "File with this name exist."); }
+				{ throw new ApiException(ApiExceptionCode.FileWithThisNameExist); }
 
 				string fileNameOnDisk = FileNameAnalyzer.GenerateFileName();
 

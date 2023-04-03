@@ -19,7 +19,7 @@ namespace api.Services.UserServiceNS
 				.GetById(userId)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-			if (user == null) throw new ApiException(ApiExceptionCode.NotFound, "User not found.");
+			if (user == null) throw new ApiException(ApiExceptionCode.UserNotFound);
 
 			UserDTO dto = UserDTO.GetDTO(user);
 			return dto;

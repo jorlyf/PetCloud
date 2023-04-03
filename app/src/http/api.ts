@@ -27,6 +27,11 @@ const $api = axios.create({
   baseURL: BASE_URL
 });
 
+$api.interceptors.request.use(config => {
+  config.headers["Accept-Language"] = "ru-RU";
+  return config;
+});
+
 export const setupApiToken = (token: string | null) => {
   $api.interceptors.request.use(config => {
     config.headers!.Authorization = token ? `Bearer ${token}` : "";

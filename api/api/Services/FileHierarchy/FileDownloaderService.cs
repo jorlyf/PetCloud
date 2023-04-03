@@ -1,5 +1,4 @@
-﻿using api.Entities.UserNS;
-using api.Infrastructure.Exceptions;
+﻿using api.Infrastructure.Exceptions;
 using api.Infrastructure.Utils;
 using api.Repositories.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
@@ -22,8 +21,8 @@ namespace api.Services.FileHierarchy
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
 
-			if (file == null) throw new ApiException(ApiExceptionCode.NotFound, "File not found.");
-			if (file.UserId != userId) throw new ApiException(ApiExceptionCode.IncorrectResponseData, "Access denied.");
+			if (file == null) throw new ApiException(ApiExceptionCode.FileNotFound);
+			if (file.UserId != userId) throw new ApiException(ApiExceptionCode.AccessDenied);
 
 			return $"{AppDirectories.CloudData}\\{file.Path}";
 		}

@@ -88,7 +88,13 @@ else
 	app.UseCors("Production");
 }
 
-app.ConfigureExceptionHandler(); // custom exception handler
+app.UseExceptionHandler(config =>
+{
+	config.Run(context =>
+	{
+		return ExceptionMiddleware.HandleExceptionAsync(context);
+	});
+});
 
 app.UseHttpsRedirection();
 

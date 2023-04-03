@@ -21,16 +21,16 @@ namespace api.Services.FileHierarchyServicesNS
 		public async Task<FileDTO> CreateEmptyFile(Guid userId, Guid folderId, string fileName)
 		{
 			if (await _UoW.FileRepository.FileExist(folderId, fileName))
-			{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "File with this name exist."); }
+			{ throw new ApiException(ApiExceptionCode.FileWithThisNameExist); }
 
 			Folder? folder = await _UoW.FolderRepository
 				.GetById(folderId)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
 			if (folder == null)
-			{ throw new ApiException(ApiExceptionCode.NotFound, "Folder not found."); }
+			{ throw new ApiException(ApiExceptionCode.FolderNotFound); }
 			if (folder.UserId != userId)
-			{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "Access denied."); }
+			{ throw new ApiException(ApiExceptionCode.AccessDenied); }
 
 			string fileNameOnDisk = FileNameAnalyzer.GenerateFileName();
 
@@ -56,14 +56,14 @@ namespace api.Services.FileHierarchyServicesNS
 		{
 			Folder? parentFolder = await _UoW.FolderRepository.GetById(parentId).FirstOrDefaultAsync();
 			if (parentFolder == null)
-			{ throw new ApiException(ApiExceptionCode.NotFound, "Parent folder not found."); }
+			{ throw new ApiException(ApiExceptionCode.FolderNotFound); }
 			if (parentFolder.UserId != userId)
-			{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "Access denied."); }
+			{ throw new ApiException(ApiExceptionCode.AccessDenied); }
 
 			Folder rootFolder = await GetRootFolder(userId);
 
 			if (await _UoW.FolderRepository.FolderExist(parentId, folderName))
-			{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "Folder with this name exist."); }
+			{ throw new ApiException(ApiExceptionCode.FolderWithThisNameExist); }
 
 			Folder createdFolder = new()
 			{
@@ -104,7 +104,8 @@ namespace api.Services.FileHierarchyServicesNS
 				.GetById(userId)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-			if (user == null) throw new ApiException(ApiExceptionCode.NotFound, "User not found.");
+			if (user == null)
+			{ throw new ApiException(ApiExceptionCode.UserNotFound); }
 			return await GetRootFolder(user);
 		}
 		private async Task<Folder> GetRootFolder(User user)
@@ -113,7 +114,7 @@ namespace api.Services.FileHierarchyServicesNS
 				.GetById(user.RootFolderId)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-			if (folder == null) throw new ApiException(ApiExceptionCode.NotFound, "Root folder not found.");
+			if (folder == null) throw new ApiException(ApiExceptionCode.FolderNotFound);
 			return folder;
 		}
 	}

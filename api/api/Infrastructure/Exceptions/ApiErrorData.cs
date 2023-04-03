@@ -7,10 +7,10 @@ namespace api.Infrastructure.Exceptions
 		public int Code { get; set; }
 		public string Message { get; set; }
 
-		public ApiErrorData(ApiException exception)
+		public ApiErrorData(ApiException exception, Language language)
 		{
 			Code = (int)exception.Code;
-			Message = exception.Message;
+			Message = ExceptionMessageTranslator.GetMessage(exception.Code, language);
 		}
 
 		public override string ToString()

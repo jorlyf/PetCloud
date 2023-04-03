@@ -3,34 +3,33 @@ using System.Net;
 
 namespace api.Infrastructure.Exceptions
 {
-	public static class ExceptionMiddlewareExtension
+	public static class ExceptionMiddleware
 	{
-		public static void ConfigureExceptionHandler(this IApplicationBuilder app)
+		public static Task HandleExceptionAsync(HttpContext context)
 		{
-			app.UseExceptionHandler(appError =>
+			IExceptionHandlerFeature? contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+			Exception? exception = contextFeature?.Error;
+			if (exception == null)
 			{
-				appError.Run(async context =>
-				{
-					IExceptionHandlerFeature? contextFeature = context.Features.Get<IExceptionHandlerFeature>();
-					Exception? exception = contextFeature?.Error;
-					if (exception != null)
-					{
-						ApiErrorData errorData;
-						if (exception is ApiException apiException)
-						{
-							errorData = apiException.GetData();
-							context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-						}
-						else
-						{
-							errorData = new InternalApiException().GetData();
-							context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-						}
+				return null;
+			}
+			string? acceptLanguage = context.Request.Headers["Accept-Language"];
+			Language language = ExceptionMessageTranslator
+				.GetLanguageFromAcceptLanguageHeader(acceptLanguage);
 
-						await context.Response.WriteAsync(errorData.ToString());
-					}
-				});
-			});
+			ApiErrorData errorData;
+			if (exception is ApiException apiException)
+			{
+				errorData = apiException.GetData(language);
+				context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+			}
+			else
+			{
+				errorData = new InternalApiException().GetData(language);
+				context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+			}
+
+			return context.Response.WriteAsync(errorData.ToString());
 		}
 	}
 }

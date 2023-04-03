@@ -21,14 +21,14 @@ namespace api.Services.FileHierarchyServicesNS
 				.GetById(userId)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-			if (user == null) throw new ApiException(ApiExceptionCode.NotFound, "User not found.");
+			if (user == null) throw new ApiException(ApiExceptionCode.UserNotFound);
 
 			Folder? root = await _UoW.FolderRepository
 				.GetById(user.RootFolderId)
 				.Include(x => x.Files)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-			if (root == null) throw new ApiException(ApiExceptionCode.NotFound, "Root folder not found.");
+			if (root == null) throw new ApiException(ApiExceptionCode.FolderNotFound);
 
 			IEnumerable<Folder> childs = await GetFolderChilds(userId, root.Id);
 
@@ -43,9 +43,9 @@ namespace api.Services.FileHierarchyServicesNS
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
 			if (folder == null)
-			{ throw new ApiException(ApiExceptionCode.NotFound, "Folder not found."); }
+			{ throw new ApiException(ApiExceptionCode.FolderNotFound); }
 			if (folder.UserId != userId)
-			{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "Access denied."); }
+			{ throw new ApiException(ApiExceptionCode.AccessDenied); }
 
 			IEnumerable<Folder> childs = await GetFolderChilds(userId, folder.Id);
 

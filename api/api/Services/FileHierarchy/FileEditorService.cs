@@ -22,9 +22,9 @@ namespace api.Services.FileHierarchyServicesNS
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
 			if (file == null)
-			{ throw new ApiException(ApiExceptionCode.NotFound, "File not found."); }
+			{ throw new ApiException(ApiExceptionCode.FileNotFound); }
 			if (file.UserId != userId)
-			{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "Access denied."); }
+			{ throw new ApiException(ApiExceptionCode.AccessDenied); }
 
 			string absoluteFilePath = $"{AppDirectories.CloudData}\\{file.Path}";
 			await System.IO.File.WriteAllTextAsync(absoluteFilePath, string.Empty);
@@ -40,12 +40,12 @@ namespace api.Services.FileHierarchyServicesNS
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
 			if (file == null)
-			{ throw new ApiException(ApiExceptionCode.NotFound, "File not found."); }
+			{ throw new ApiException(ApiExceptionCode.FileNotFound); }
 			if (file.UserId != userId)
-			{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "Access denied."); }
+			{ throw new ApiException(ApiExceptionCode.AccessDenied); }
 
 			if (await _UoW.FileRepository.FileExist(file.FolderId, fileName))
-			{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "File with this name exist."); }
+			{ throw new ApiException(ApiExceptionCode.FileWithThisNameExist); }
 
 			file.Name = fileName;
 

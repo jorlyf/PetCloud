@@ -18,5 +18,10 @@ namespace api.Repositories
 		{
 			return Set.Where(user => user.Login.ToLower().Contains(login.ToLower()));
 		}
+
+		public Task<bool> UserExist(string login)
+		{
+			return Set.AnyAsync(user => user.Login == login);
+		}
 	}
 }

@@ -22,9 +22,9 @@ namespace api.Services.FileHierarchyServicesNS
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
 			if (file == null)
-			{ throw new ApiException(ApiExceptionCode.NotFound, "File not found."); }
+			{ throw new ApiException(ApiExceptionCode.FileNotFound); }
 			if (file.UserId != userId)
-			{ throw new ApiException(ApiExceptionCode.IncorrectResponseData, "Access denied."); }
+			{ throw new ApiException(ApiExceptionCode.AccessDenied); }
 
 			FileStream stream = new FileStream(
 				$"{AppDirectories.CloudData}\\{file.Path}",

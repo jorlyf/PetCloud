@@ -34,20 +34,15 @@ namespace api.Services.AuthorizationServicesNS
 
 			string passwordHash = _hashService.GetHash(password);
 			if (user == null || user.PasswordHash != passwordHash)
-			{
-				throw new ApiException(ApiExceptionCode.IncorrectResponseData, "User login or password is not valid.");
-			}
-
+			{ throw new ApiException(ApiExceptionCode.LoginDataNotValid); }
 			string token = _jwtService.GenerateToken(user);
 			return token;
 
 		}
 		public async Task<string> RegisterAsync(string login, string password)
 		{
-			if (await IsUserLoginExist(login))
-			{
-				throw new ApiException(ApiExceptionCode.IncorrectResponseData, "User login already exist.");
-			}
+			if (await _UoW.UserRepository.UserExist(login))
+			{ throw new ApiException(ApiExceptionCode.UserLoginExist); }
 
 			string passwordHash = _hashService.GetHash(password);
 			User user = new()
@@ -62,15 +57,6 @@ namespace api.Services.AuthorizationServicesNS
 
 			string token = _jwtService.GenerateToken(user);
 			return token;
-		}
-		public async Task<bool> IsUserLoginExist(string login)
-		{
-			User? user = await _UoW.UserRepository
-				.GetByLogin(login)
-				.AsNoTracking()
-				.FirstOrDefaultAsync();
-
-			return user != null;
 		}
 	}
 }
