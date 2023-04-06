@@ -5,7 +5,7 @@ const useModals = () => {
   const isOpenCreateFileModal = useAppSelector(state => state.createFile.isOpenModal);
   const isOpenCreateFolderModal = useAppSelector(state => state.createFolder.isOpenModal);
   const openedFile = useOpenedFile();
-  const downloadItemsCount = useAppSelector(state => state.downloader.items.length);
+  const downloadItemsCount = useAppSelector(state => state.hierarchyDownloader.items.length);
 
   return {
     isOpenCreateFileModal,

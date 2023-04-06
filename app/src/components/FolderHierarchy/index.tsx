@@ -1,6 +1,6 @@
 import * as React from "react";
 import useFolderHierarchy from "./useFolderHierarchy";
-import { backToParentFolder } from "@redux/slices/file";
+import { backToParentFolder } from "@redux/slices/hierarchy";
 import useAppDispatch from "@hooks/useAppDispatch";
 import Folder from "@components/Folder";
 import OpenedFolderInfo from "@components/OpenedFolderInfo";

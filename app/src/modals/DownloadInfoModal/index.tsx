@@ -1,6 +1,6 @@
 import * as React from "react";
 import useDownloadInfoModal from "./useDownloadInfoModal";
-import { IDownloadItem } from "@redux/slices/downloader";
+import { IDownloadItem } from "@redux/slices/hierarchyDownloader";
 
 import styles from "./index.module.scss";
 

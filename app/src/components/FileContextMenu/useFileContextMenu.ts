@@ -1,6 +1,6 @@
 import * as React from "react";
-import { downloadFile, setDownloadItemPromise } from "@redux/slices/downloader";
-import { closeFileContextMenu, findFileById, openFile } from "@redux/slices/file";
+import { downloadFile, setDownloadItemPromise } from "@redux/slices/hierarchyDownloader";
+import { closeFileContextMenu, findFileById, openFile } from "@redux/slices/hierarchy";
 import useAppSelector from "@hooks/useAppSelector";
 import useAppDispatch from "@hooks/useAppDispatch";
 import { DropDownListElement } from "@components/DropDownList";
@@ -8,8 +8,8 @@ import { DropDownListElement } from "@components/DropDownList";
 const useFileContextMenu = () => {
   const dispatch = useAppDispatch();
 
-  const rootFolder = useAppSelector(state => state.file.rootFolder);
-  const contextMenuSelectedFileId = useAppSelector(state => state.file.contextMenuSelectedFileId);
+  const rootFolder = useAppSelector(state => state.hierarchy.rootFolder);
+  const contextMenuSelectedFileId = useAppSelector(state => state.hierarchy.contextMenuSelectedFileId);
 
   const selectedFile = React.useMemo(() => {
     return findFileById(rootFolder, contextMenuSelectedFileId);

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { closeFile } from "@redux/slices/file";
+import { closeFile } from "@redux/slices/hierarchy";
 import { clearContent, loadFileContent } from "@redux/slices/openedFile";
 import useAppDispatch from "@hooks/useAppDispatch";
 import useOpenedFile from "@hooks/useOpenedFile";

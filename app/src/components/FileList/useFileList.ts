@@ -1,15 +1,15 @@
 import * as React from "react";
-import { closeFileAreaContexteMenu, closeFileContextMenu, openFileAreaContextMenu, openFileContextMenu } from "@redux/slices/file";
+import { closeFileAreaContexteMenu, closeFileContextMenu, openFileAreaContextMenu, openFileContextMenu } from "@redux/slices/hierarchy";
 import useAppSelector from "@hooks/useAppSelector";
 import useAppDispatch from "@hooks/useAppDispatch";
 
 const useFileList = (fileListDivRef: React.MutableRefObject<HTMLDivElement>) => {
   const dispatch = useAppDispatch();
 
-  const isOpenFileContextMenu = useAppSelector(state => state.file.isOpenFileContextMenu);
-  const fileContextMenuPosition = useAppSelector(state => state.file.fileContextMenuPosition);
-  const isOpenFileAreaContextMenu = useAppSelector(state => state.file.isOpenFileAreaContextMenu);
-  const fileAreaContextMenuPosition = useAppSelector(state => state.file.fileAreaContextMenuPosition);
+  const isOpenFileContextMenu = useAppSelector(state => state.hierarchy.isOpenFileContextMenu);
+  const fileContextMenuPosition = useAppSelector(state => state.hierarchy.fileContextMenuPosition);
+  const isOpenFileAreaContextMenu = useAppSelector(state => state.hierarchy.isOpenFileAreaContextMenu);
+  const fileAreaContextMenuPosition = useAppSelector(state => state.hierarchy.fileAreaContextMenuPosition);
 
   const handleOpenFileContextMenu = (e: React.MouseEvent<HTMLDivElement>, fileId: string) => {
     e.preventDefault();

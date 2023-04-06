@@ -55,6 +55,7 @@ builder.Services.AddScoped<DownloaderService>();
 builder.Services.AddScoped<FolderRetrievalService>();
 builder.Services.AddScoped<FileRetrievalService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<HierarchyMovingService>();
 #endregion
 
 builder.Services.AddCors(options =>

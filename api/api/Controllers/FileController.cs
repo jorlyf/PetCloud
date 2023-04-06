@@ -71,5 +71,23 @@ namespace api.Controllers
 			await _fileUploaderService.UploadFiles(userId, folderId, files);
 			return Ok();
 		}
+
+		[HttpPost]
+		[Route("MoveFolder")]
+		public async Task<ActionResult> MoveFolder(Guid folderId, Guid targetFolderId)
+		{
+			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
+
+			return Ok();
+		}
+
+		[HttpPost]
+		[Route("MoveFile")]
+		public async Task<ActionResult> MoveFile(Guid fileId, Guid targetFolderId)
+		{
+			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
+
+			return Ok();
+		}
 	}
 }

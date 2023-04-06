@@ -1,24 +1,24 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import auth from "./slices/auth";
-import file from "./slices/file";
+import hierarchy from "./slices/hierarchy";
 import user from "./slices/user";
 import createFolder from "./slices/createFolder"
 import createFile from "./slices/createFile";
 import openedFile from "./slices/openedFile";
 import fileUpload from "./slices/fileUpload";
-import downloader from "./slices/downloader";
+import hierarchyDownloader from "./slices/hierarchyDownloader";
 
 const store = configureStore({
   reducer: {
     auth,
-    file,
+    hierarchy,
     user,
     createFolder,
     createFile,
     openedFile,
     fileUpload,
-    downloader
+    hierarchyDownloader
   }
 });
 

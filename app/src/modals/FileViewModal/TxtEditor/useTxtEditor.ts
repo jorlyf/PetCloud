@@ -9,7 +9,7 @@ const useTxtEditor = () => {
   const [serverText, setServerText] = React.useState<string>("");
   const [text, setText] = React.useState<string>("");
 
-  const fileId = useAppSelector(state => state.file.openedFileId);
+  const fileId = useAppSelector(state => state.hierarchy.openedFileId);
 
   const fileLoaded = useAppSelector(state => state.openedFile.loaded);
   const fileContent = useAppSelector(state => state.openedFile.content);

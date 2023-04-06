@@ -1,5 +1,5 @@
 import store from "@redux/store";
-import { retrieveFolder } from "./file";
+import { retrieveFolder } from "./hierarchy";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import FileUploadService from "@services/FileUploadService/FileUploadService";
 import { NotificationService } from "@notification/NotificationService";

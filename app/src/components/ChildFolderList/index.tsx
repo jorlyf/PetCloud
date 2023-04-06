@@ -1,5 +1,5 @@
 import * as React from "react";
-import { openFolder } from "@redux/slices/file";
+import { openFolder } from "@redux/slices/hierarchy";
 import useAppDispatch from "@hooks/useAppDispatch";
 import FolderModel from "@entities/file/FolderModel";
 

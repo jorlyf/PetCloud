@@ -1,6 +1,6 @@
 import store from "@redux/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { findFileById, findFolderById } from "./file";
+import { findFileById, findFolderById } from "./hierarchy";
 import DownloaderService from "@services/DownloaderService/DownloaderService";
 
 const isExistDownloadItem = (items: IDownloadItem[], id: string): boolean => {
@@ -8,27 +8,27 @@ const isExistDownloadItem = (items: IDownloadItem[], id: string): boolean => {
 }
 
 export const downloadFile = createAsyncThunk<string, string, { rejectValue: string }>(
-  "downloader/downloadItem",
+  "hierarchyDownloader/downloadItem",
   async (fileId, { rejectWithValue, signal }) => {
-    const fileState = store.getState().file;
+    const fileState = store.getState().hierarchy;
     const file = findFileById(fileState.rootFolder, fileId);
     if (!file) return;
 
-    if (isExistDownloadItem(store.getState().downloader.items, file.id)) {
+    if (isExistDownloadItem(store.getState().hierarchyDownloader.items, file.id)) {
       return;
     }
 
     const onProgress = (progress: number) => {
       const action: PayloadAction<{ id: string, progress: number }> = {
         payload: { id: file.id, progress },
-        type: "downloader/updateDownloadItemProgress"
+        type: "hierarchyDownloader/updateDownloadItemProgress"
       }
       store.dispatch(action);
     }
 
     const createDownloadItemAction: PayloadAction<{ id: string, name: string }> = {
       payload: { id: file.id, name: file.name },
-      type: "downloader/createDownloadItem"
+      type: "hierarchyDownloader/createDownloadItem"
     }
     store.dispatch(createDownloadItemAction);
 
@@ -42,27 +42,27 @@ export const downloadFile = createAsyncThunk<string, string, { rejectValue: stri
 );
 
 export const downloadFolder = createAsyncThunk<string, string, { rejectValue: string }>(
-  "downloader/downloadItem",
+  "hierarchyDownloader/downloadItem",
   async (folderId, { rejectWithValue, signal }) => {
-    const fileState = store.getState().file;
+    const fileState = store.getState().hierarchy;
     const folder = findFolderById(fileState.rootFolder, folderId);
     if (!folder) return;
 
-    if (isExistDownloadItem(store.getState().downloader.items, folder.id)) {
+    if (isExistDownloadItem(store.getState().hierarchyDownloader.items, folder.id)) {
       return;
     }
 
     const onProgress = (progress: number) => {
       const action: PayloadAction<{ id: string, progress: number }> = {
         payload: { id: folder.id, progress },
-        type: "downloader/updateDownloadItemProgress"
+        type: "hierarchyDownloader/updateDownloadItemProgress"
       }
       store.dispatch(action);
     }
 
     const createDownloadItemAction: PayloadAction<{ id: string, name: string }> = {
       payload: { id: folder.id, name: folder.name },
-      type: "downloader/createDownloadItem"
+      type: "hierarchyDownloader/createDownloadItem"
     }
     store.dispatch(createDownloadItemAction);
 
@@ -93,8 +93,8 @@ const initialState: IDownloaderState = {
   items: []
 }
 
-const downloaderSlice = createSlice({
-  name: "downloader",
+const hierarchyDownloaderSlice = createSlice({
+  name: "hierarchyDownloader",
   initialState,
   reducers: {
     updateDownloadItemProgress(state, action: PayloadAction<{ id: string, progress: number }>) {
@@ -153,6 +153,6 @@ export const {
   abortDownloadItem,
   removeDownloadItem,
   setDownloadItemPromise
-} = downloaderSlice.actions;
+} = hierarchyDownloaderSlice.actions;
 
-export default downloaderSlice.reducer;
+export default hierarchyDownloaderSlice.reducer;

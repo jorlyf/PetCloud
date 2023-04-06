@@ -41,7 +41,7 @@ namespace api.Services.FileHierarchyServicesNS
 				FolderId = folderId,
 				UserId = userId,
 				Name = fileName,
-				Path = $"{rootFolder.Path}\\{fileNameOnDisk}",
+				Path = $"{folder.Path}\\{fileNameOnDisk}",
 				Type = FileNameAnalyzer.AnalyzeExtension(fileName)
 			};
 			await _UoW.FileRepository.AddAsync(file);

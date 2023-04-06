@@ -2,10 +2,10 @@ import { setIsOpenModal as setIsOpenCreateFolderModal } from "@redux/slices/crea
 import { setIsOpenModal as setIsOpenCreateFileModal } from "@redux/slices/createFile";
 import useAppDispatch from "@hooks/useAppDispatch";
 import useAppSelector from "@hooks/useAppSelector";
-import { downloadFolder, setDownloadItemPromise } from "@redux/slices/downloader";
+import { downloadFolder, setDownloadItemPromise } from "@redux/slices/hierarchyDownloader";
 import { uploadFiles } from "@redux/slices/fileUpload";
 import { NotificationService } from "@notification/NotificationService";
-import { closeFileAreaContexteMenu } from "@redux/slices/file";
+import { closeFileAreaContexteMenu } from "@redux/slices/hierarchy";
 
 interface IUseFileAreaContextMenuProps {
   handleClose: () => void;
@@ -14,7 +14,7 @@ interface IUseFileAreaContextMenuProps {
 const useFileAreaContextMenu = ({ handleClose }: IUseFileAreaContextMenuProps) => {
   const dispatch = useAppDispatch();
 
-  const openedFolderId = useAppSelector(state => state.file.openedFolderId);
+  const openedFolderId = useAppSelector(state => state.hierarchy.openedFolderId);
   const fileLoading = useAppSelector(state => state.fileUpload.loading);
 
   const handleUploadFiles = () => {

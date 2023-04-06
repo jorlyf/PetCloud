@@ -9,7 +9,7 @@ import { submitFileCreation } from "./createFile";
 import { NotificationService } from "@notification/NotificationService";
 
 export const retrieveRootFolder = createAsyncThunk<{ root: FolderModel, login: string }>(
-  "file/retrieveRootFolder",
+  "hierarchy/retrieveRootFolder",
   async () => {
     const rootFolder = await FolderRetrievalService.retrieveRoot();
     const login = store.getState().user.login;
@@ -18,7 +18,7 @@ export const retrieveRootFolder = createAsyncThunk<{ root: FolderModel, login: s
 );
 
 export const retrieveFolder = createAsyncThunk<FolderModel, string>(
-  "file/retrieveFolder",
+  "hierarchy/retrieveFolder",
   async (folderId) => {
     const folder = await FolderRetrievalService.retrieveFolder(folderId);
     return folder;
@@ -77,8 +77,8 @@ const initialState: IFileState = {
   contextMenuSelectedFileId: null
 }
 
-const fileSlice = createSlice({
-  name: "file",
+const hierarchySlice = createSlice({
+  name: "hierarchy",
   initialState,
   reducers: {
     setRootFolder: (state, action: PayloadAction<FolderModel>) => {
@@ -110,7 +110,7 @@ const fileSlice = createSlice({
       state.isOpenFileAreaContextMenu = true;
       state.fileAreaContextMenuPosition = action.payload;
 
-      fileSlice.caseReducers.closeFileContextMenu(state);
+      hierarchySlice.caseReducers.closeFileContextMenu(state);
     },
     closeFileAreaContexteMenu: (state) => {
       state.isOpenFileAreaContextMenu = false;
@@ -121,7 +121,7 @@ const fileSlice = createSlice({
       state.fileContextMenuPosition = action.payload.position;
       state.contextMenuSelectedFileId = action.payload.fileId;
 
-      fileSlice.caseReducers.closeFileAreaContexteMenu(state);
+      hierarchySlice.caseReducers.closeFileAreaContexteMenu(state);
     },
     closeFileContextMenu: (state) => {
       state.isOpenFileContextMenu = false;
@@ -172,9 +172,9 @@ const fileSlice = createSlice({
         action.payload.root.path = `${action.payload.login}\\Root`;
         const setRootAction: PayloadAction<FolderModel> = {
           payload: action.payload.root,
-          type: "file/setRootFolder"
+          type: "hierarchy/setRootFolder"
         }
-        fileSlice.caseReducers.setRootFolder(state, setRootAction);
+        hierarchySlice.caseReducers.setRootFolder(state, setRootAction);
       })
       .addCase(submitFolderCreation.fulfilled, (state, action) => {
         const addChildAction: PayloadAction<{ parentId: string, child: FolderModel }> = {
@@ -182,9 +182,9 @@ const fileSlice = createSlice({
             parentId: action.payload.parentId,
             child: action.payload
           },
-          type: "file/addChildFolder"
+          type: "hierarchy/addChildFolder"
         }
-        fileSlice.caseReducers.addChildFolder(state, addChildAction);
+        hierarchySlice.caseReducers.addChildFolder(state, addChildAction);
         NotificationService.add("Папка успешно создана", "bottom-right", "success");
       })
       .addCase(submitFileCreation.fulfilled, (state, action) => {
@@ -193,17 +193,17 @@ const fileSlice = createSlice({
             parentId: action.payload.folderId,
             child: action.payload
           },
-          type: "file/addChildFile"
+          type: "hierarchy/addChildFile"
         }
-        fileSlice.caseReducers.addChildFile(state, addChildAction);
+        hierarchySlice.caseReducers.addChildFile(state, addChildAction);
         NotificationService.add("Файл успешно создан", "bottom-right", "success");
       })
       .addCase(retrieveFolder.fulfilled, (state, action) => {
         const updateAction: PayloadAction<FolderModel> = {
           payload: action.payload,
-          type: "file/updateFolder"
+          type: "hierarchy/updateFolder"
         }
-        fileSlice.caseReducers.updateFolder(state, updateAction);
+        hierarchySlice.caseReducers.updateFolder(state, updateAction);
       })
   },
 });
@@ -221,6 +221,6 @@ export const {
   closeFileContextMenu,
   openFile,
   closeFile
-} = fileSlice.actions;
+} = hierarchySlice.actions;
 
-export default fileSlice.reducer;
+export default hierarchySlice.reducer;
