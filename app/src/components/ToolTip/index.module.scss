@@ -1,0 +1,11 @@
+.ToolTipContainer {
+  .ToolTip {
+    position        : fixed;
+    padding         : 3px;
+    font-size       : 14px;
+    border          : 1px solid var(--dark-blue-color);
+    border-radius   : 5px;
+    background-color: var(--app-color);
+    z-index         : 10000;
+  }
+}

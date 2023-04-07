@@ -4,6 +4,9 @@ import { closeFileContextMenu, findFileById, openFile } from "@redux/slices/hier
 import useAppSelector from "@hooks/useAppSelector";
 import useAppDispatch from "@hooks/useAppDispatch";
 import { DropDownListElement } from "@components/DropDownList";
+import { setCuttedFile } from "@redux/slices/hieararchyCut";
+import { isAllowedToViewFileType } from "@modals/FileViewModal/useFileViewModal";
+import { NotificationService } from "@notification/NotificationService";
 
 const useFileContextMenu = () => {
   const dispatch = useAppDispatch();
@@ -16,8 +19,11 @@ const useFileContextMenu = () => {
   }, [rootFolder, contextMenuSelectedFileId]);
 
   const handleOpenFile = () => {
-    if (selectedFile !== null)
-      dispatch(openFile(selectedFile));
+    if (selectedFile !== null) {
+      if (isAllowedToViewFileType(selectedFile.type)) {
+        dispatch(openFile(selectedFile));
+      } else NotificationService.add("Файл нельзя открыть", "bottom-right", "info", 1500);
+    }
     dispatch(closeFileContextMenu());
   }
 
@@ -29,14 +35,26 @@ const useFileContextMenu = () => {
     dispatch(closeFileContextMenu());
   }
 
+  const handleCutFile = () => {
+    if (selectedFile !== null)
+      dispatch(setCuttedFile(selectedFile.id));
+    dispatch(closeFileContextMenu());
+  }
+
   const menuItems: DropDownListElement[] = [
     {
       onClick: handleOpenFile,
-      label: "Открыть"
+      label: "Открыть",
+      disabled: !isAllowedToViewFileType(selectedFile.type),
+      disabledLabel: "Не поддерживается."
     },
     {
       onClick: handleDownloadFile,
       label: "Скачать"
+    },
+    {
+      onClick: handleCutFile,
+      label: "Вырезать"
     },
     {
       label: "Переименовать"

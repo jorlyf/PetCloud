@@ -1,7 +1,7 @@
 import $api from "@http/api";
 import { AxiosRequestConfig, GenericAbortSignal } from "axios";
 
-export default class DownloaderService {
+export default class HierarchyDownloaderService {
   static async saveFile(fileId: string, fileName: string, onProgress: (progress: number) => void, signal: GenericAbortSignal) {
     const config: AxiosRequestConfig = {
       responseType: "blob",

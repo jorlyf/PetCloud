@@ -5,6 +5,12 @@ import useAppDispatch from "@hooks/useAppDispatch";
 import useOpenedFile from "@hooks/useOpenedFile";
 import { FileType } from "@entities/file/FileModel";
 import useAppSelector from "@hooks/useAppSelector";
+import { NotificationService } from "@notification/NotificationService";
+
+export const isAllowedToViewFileType = (fileType: FileType) => {
+  if (fileType === FileType.video) return false; // TODO video player
+  return fileType !== FileType.undefined;
+}
 
 const useFileViewModal = () => {
   const dispatch = useAppDispatch();

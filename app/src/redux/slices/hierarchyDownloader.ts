@@ -1,7 +1,7 @@
 import store from "@redux/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { findFileById, findFolderById } from "./hierarchy";
-import DownloaderService from "@services/DownloaderService/DownloaderService";
+import HierarchyDownloaderService from "@services/HierarchyDownloaderService/HierarchyDownloaderService";
 
 const isExistDownloadItem = (items: IDownloadItem[], id: string): boolean => {
   return items.find(x => x.id === id) !== undefined;
@@ -33,7 +33,7 @@ export const downloadFile = createAsyncThunk<string, string, { rejectValue: stri
     store.dispatch(createDownloadItemAction);
 
     try {
-      await DownloaderService.saveFile(file.id, file.name, onProgress, signal);
+      await HierarchyDownloaderService.saveFile(file.id, file.name, onProgress, signal);
       return file.id;
     } catch (error) {
       return rejectWithValue(file.id);
@@ -67,7 +67,7 @@ export const downloadFolder = createAsyncThunk<string, string, { rejectValue: st
     store.dispatch(createDownloadItemAction);
 
     try {
-      await DownloaderService.saveFolder(folder.id, folder.name, onProgress, signal);
+      await HierarchyDownloaderService.saveFolder(folder.id, folder.name, onProgress, signal);
       return folder.id;
     } catch (error) {
       return rejectWithValue(folder.id);

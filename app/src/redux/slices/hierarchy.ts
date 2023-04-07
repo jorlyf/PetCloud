@@ -139,13 +139,21 @@ const hierarchySlice = createSlice({
 
         const files = action.payload.files;
         for (let i = 0; i < files.length; i++) {
-          const localFile = findFileById(state.rootFolder, files[i].id);
-          if (localFile) {
-            localFile.name = files[i].name;
-            localFile.type = files[i].type;
+          const serverFile = files[i]
+          const localFile = findFileById(state.rootFolder, serverFile.id);
+          if (localFile && localFile.folderId === serverFile.folderId) {
+            localFile.name = serverFile.name;
+            localFile.type = serverFile.type;
           } else {
-            localFolder.files.push(files[i]);
+            localFolder.files.push(serverFile);
           }
+        }
+
+        for (let i = 0; i < localFolder.files.length; i++) {
+          const localFile = localFolder.files[i];
+          const serverFile = files.find(f => f.id === localFile.id);
+          if (!serverFile)
+            localFolder.files = localFolder.files.filter(f => f.id !== localFile.id);
         }
 
         for (let i = 0; i < action.payload.childFolders.length; i++) {

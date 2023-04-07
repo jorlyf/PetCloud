@@ -16,16 +16,19 @@ namespace api.Controllers
 		private readonly FileHierarchyCreationService _fileHierarchyCreationService;
 		private readonly FileEditorService _fileEditorService;
 		private readonly FileUploaderService _fileUploaderService;
+		private readonly HierarchyMovingService _hierarchyMovingService;
 
 		public FileController(
 			FileHierarchyCreationService fileHierarchyCreationService,
 			FileEditorService fileEditorService,
-			FileUploaderService fileUploaderService
+			FileUploaderService fileUploaderService,
+			HierarchyMovingService hierarchyMovingService
 			)
 		{
 			_fileHierarchyCreationService = fileHierarchyCreationService;
 			_fileEditorService = fileEditorService;
 			_fileUploaderService = fileUploaderService;
+			_hierarchyMovingService = hierarchyMovingService;
 		}
 
 		[HttpPost]
@@ -77,7 +80,7 @@ namespace api.Controllers
 		public async Task<ActionResult> MoveFolder(Guid folderId, Guid targetFolderId)
 		{
 			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
-
+			await _hierarchyMovingService.MoveFolderAsync(userId, folderId, targetFolderId);
 			return Ok();
 		}
 
@@ -86,7 +89,7 @@ namespace api.Controllers
 		public async Task<ActionResult> MoveFile(Guid fileId, Guid targetFolderId)
 		{
 			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
-
+			await _hierarchyMovingService.MoveFileAsync(userId, fileId, targetFolderId);
 			return Ok();
 		}
 	}

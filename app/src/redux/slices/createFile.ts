@@ -1,7 +1,7 @@
-import FileModel from "@entities/file/FileModel";
-import { NotificationService } from "@notification/NotificationService";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import FileHierarchyCreationService from "@services/FileHierarchyCreationService/FileHierarchyCreationService";
+import FileModel from "@entities/file/FileModel";
+import { NotificationService } from "@notification/NotificationService";
 
 export const submitFileCreation = createAsyncThunk<FileModel, { folderId: string, fileName: string }, { rejectValue: string }>(
   "createFile/submitFileCreation",

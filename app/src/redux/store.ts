@@ -8,6 +8,7 @@ import createFile from "./slices/createFile";
 import openedFile from "./slices/openedFile";
 import fileUpload from "./slices/fileUpload";
 import hierarchyDownloader from "./slices/hierarchyDownloader";
+import hierarchyCut from "./slices/hieararchyCut";
 
 const store = configureStore({
   reducer: {
@@ -18,7 +19,8 @@ const store = configureStore({
     createFile,
     openedFile,
     fileUpload,
-    hierarchyDownloader
+    hierarchyDownloader,
+    hierarchyCut
   }
 });
 
