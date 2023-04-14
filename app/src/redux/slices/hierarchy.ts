@@ -7,6 +7,7 @@ import FileModel from "@entities/file/FileModel";
 import { submitFolderCreation } from "./createFolder";
 import { submitFileCreation } from "./createFile";
 import { NotificationService } from "@notification/NotificationService";
+import HierarchyRemovalService from "@services/HierarchyRemovalService/HierarchyRemovalService";
 
 export const retrieveRootFolder = createAsyncThunk<{ root: FolderModel, login: string }>(
   "hierarchy/retrieveRootFolder",
@@ -22,6 +23,30 @@ export const retrieveFolder = createAsyncThunk<FolderModel, string>(
   async (folderId) => {
     const folder = await FolderRetrievalService.retrieveFolder(folderId);
     return folder;
+  }
+);
+
+export const deleteFile = createAsyncThunk<string, string, { rejectValue: void }>(
+  "hierarchy/deleteFile",
+  async (fileId, { rejectWithValue }) => {
+    try {
+      await HierarchyRemovalService.deleteFile(fileId);
+      return fileId;
+    } catch (error) {
+      return rejectWithValue();
+    }
+  }
+);
+
+export const deleteFolder = createAsyncThunk<string, string, { rejectValue: void }>(
+  "hierarchy/deleteFolder",
+  async (folderId, { rejectWithValue }) => {
+    try {
+      await HierarchyRemovalService.deleteFolder(folderId);
+      return folderId;
+    } catch (error) {
+      return rejectWithValue();
+    }
   }
 );
 
@@ -88,17 +113,23 @@ const hierarchySlice = createSlice({
     openFolder: (state, action: PayloadAction<FolderModel>) => {
       state.openedFolderId = action.payload.id;
     },
-    addChildFile: (state, action: PayloadAction<{ parentId: string, child: FileModel }>) => {
-      const parent = findFolderById(state.rootFolder, action.payload.parentId);
-      parent.files.push(action.payload.child);
+    addFile: (state, action: PayloadAction<FileModel>) => {
+      const parent = findFolderById(state.rootFolder, action.payload.folderId);
+      parent.files.push(action.payload);
     },
-    addChildFolder: (state, action: PayloadAction<{ parentId: string, child: FolderModel }>) => {
-      const parent = findFolderById(state.rootFolder, action.payload.parentId);
-      parent.childFolders.push(action.payload.child);
+    removeFile: (state, action: PayloadAction<FileModel>) => {
+      const parentFolder = findFolderById(state.rootFolder, action.payload.folderId);
+      if (!parentFolder) return;
+
+      parentFolder.files = parentFolder.files.filter(f => f.id !== action.payload.id);
     },
-    removeChildFolder: (state, action: PayloadAction<{ parentId: string, child: FolderModel }>) => {
+    addFolder: (state, action: PayloadAction<FolderModel>) => {
       const parent = findFolderById(state.rootFolder, action.payload.parentId);
-      parent.childFolders = parent.childFolders.filter(f => f.id !== action.payload.child.id);
+      parent.childFolders.push(action.payload);
+    },
+    removeFolder: (state, action: PayloadAction<FolderModel>) => {
+      const parent = findFolderById(state.rootFolder, action.payload.parentId);
+      parent.childFolders = parent.childFolders.filter(f => f.id !== action.payload.id);
     },
     backToParentFolder: (state) => {
       const openedFolder = findFolderById(state.rootFolder, state.openedFolderId);
@@ -185,25 +216,19 @@ const hierarchySlice = createSlice({
         hierarchySlice.caseReducers.setRootFolder(state, setRootAction);
       })
       .addCase(submitFolderCreation.fulfilled, (state, action) => {
-        const addChildAction: PayloadAction<{ parentId: string, child: FolderModel }> = {
-          payload: {
-            parentId: action.payload.parentId,
-            child: action.payload
-          },
+        const addChildAction: PayloadAction<FolderModel> = {
+          payload: action.payload,
           type: "hierarchy/addChildFolder"
         }
-        hierarchySlice.caseReducers.addChildFolder(state, addChildAction);
+        hierarchySlice.caseReducers.addFolder(state, addChildAction);
         NotificationService.add("Папка успешно создана", "bottom-right", "success");
       })
       .addCase(submitFileCreation.fulfilled, (state, action) => {
-        const addChildAction: PayloadAction<{ parentId: string, child: FileModel }> = {
-          payload: {
-            parentId: action.payload.folderId,
-            child: action.payload
-          },
+        const addChildAction: PayloadAction<FileModel> = {
+          payload: action.payload,
           type: "hierarchy/addChildFile"
         }
-        hierarchySlice.caseReducers.addChildFile(state, addChildAction);
+        hierarchySlice.caseReducers.addFile(state, addChildAction);
         NotificationService.add("Файл успешно создан", "bottom-right", "success");
       })
       .addCase(retrieveFolder.fulfilled, (state, action) => {
@@ -213,15 +238,44 @@ const hierarchySlice = createSlice({
         }
         hierarchySlice.caseReducers.updateFolder(state, updateAction);
       })
+
+      .addCase(deleteFile.fulfilled, (state, action) => {
+        const file = findFileById(state.rootFolder, action.payload);
+        if (file === null) return;
+
+        const deleteFileAction: PayloadAction<FileModel> = {
+          payload: file,
+          type: "hierarchy/removeFile"
+        }
+
+        hierarchySlice.caseReducers.removeFile(state, deleteFileAction);
+      })
+      .addCase(deleteFile.rejected, (state) => {
+        NotificationService.add("Произошла ошибка при удалении файла.", "bottom-right", "warning");
+      })
+      .addCase(deleteFolder.fulfilled, (state, action) => {
+        const folder = findFolderById(state.rootFolder, action.payload);
+        if (folder === null) return;
+
+        const deleteFolderAction: PayloadAction<FolderModel> = {
+          payload: folder,
+          type: "hierarchy/removeFolder"
+        }
+
+        hierarchySlice.caseReducers.removeFolder(state, deleteFolderAction);
+      })
+      .addCase(deleteFolder.rejected, (state) => {
+        NotificationService.add("Произошла ошибка при удалении папки.", "bottom-right", "warning");
+      })
   },
 });
 
 export const {
   setRootFolder,
   openFolder,
-  addChildFile,
-  addChildFolder,
-  removeChildFolder,
+  addFile,
+  addFolder,
+  removeFolder,
   backToParentFolder,
   openFileAreaContextMenu,
   closeFileAreaContexteMenu,

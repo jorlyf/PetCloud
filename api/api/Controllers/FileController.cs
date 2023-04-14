@@ -17,18 +17,21 @@ namespace api.Controllers
 		private readonly FileEditorService _fileEditorService;
 		private readonly FileUploaderService _fileUploaderService;
 		private readonly HierarchyMovingService _hierarchyMovingService;
+		private readonly HierarchyRemovalService _hierarchyRemovalService;
 
 		public FileController(
 			FileHierarchyCreationService fileHierarchyCreationService,
 			FileEditorService fileEditorService,
 			FileUploaderService fileUploaderService,
-			HierarchyMovingService hierarchyMovingService
+			HierarchyMovingService hierarchyMovingService,
+			HierarchyRemovalService hierarchyRemovalService
 			)
 		{
 			_fileHierarchyCreationService = fileHierarchyCreationService;
 			_fileEditorService = fileEditorService;
 			_fileUploaderService = fileUploaderService;
 			_hierarchyMovingService = hierarchyMovingService;
+			_hierarchyRemovalService = hierarchyRemovalService;
 		}
 
 		[HttpPost]
@@ -90,6 +93,24 @@ namespace api.Controllers
 		{
 			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
 			await _hierarchyMovingService.MoveFileAsync(userId, fileId, targetFolderId);
+			return Ok();
+		}
+
+		[HttpDelete]
+		[Route("DeleteFile")]
+		public async Task<ActionResult> DeleteFile(Guid fileId)
+		{
+			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
+			await _hierarchyRemovalService.DeleteFile(userId, fileId);
+			return Ok();
+		}
+
+		[HttpDelete]
+		[Route("DeleteFolder")]
+		public async Task<ActionResult> DeleteFolder(Guid folderId)
+		{
+			Guid userId = IdentityUtils.GetAuthorizedUserId(User);
+			await _hierarchyRemovalService.DeleteFolder(userId, folderId);
 			return Ok();
 		}
 	}

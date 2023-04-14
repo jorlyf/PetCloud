@@ -1,6 +1,6 @@
 import * as React from "react";
 import { downloadFile, setDownloadItemPromise } from "@redux/slices/hierarchyDownloader";
-import { closeFileContextMenu, findFileById, openFile } from "@redux/slices/hierarchy";
+import { closeFileContextMenu, deleteFile, findFileById, openFile } from "@redux/slices/hierarchy";
 import useAppSelector from "@hooks/useAppSelector";
 import useAppDispatch from "@hooks/useAppDispatch";
 import { DropDownListElement } from "@components/DropDownList";
@@ -41,6 +41,12 @@ const useFileContextMenu = () => {
     dispatch(closeFileContextMenu());
   }
 
+  const handleDeleteFile = () => {
+    if (selectedFile !== null)
+      dispatch(deleteFile(selectedFile.id));
+    dispatch(closeFileContextMenu());
+  }
+
   const menuItems: DropDownListElement[] = [
     {
       onClick: handleOpenFile,
@@ -60,6 +66,7 @@ const useFileContextMenu = () => {
       label: "Переименовать"
     },
     {
+      onClick: handleDeleteFile,
       label: "Удалить"
     }
   ];

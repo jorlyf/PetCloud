@@ -56,6 +56,7 @@ builder.Services.AddScoped<FolderRetrievalService>();
 builder.Services.AddScoped<FileRetrievalService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<HierarchyMovingService>();
+builder.Services.AddScoped<HierarchyRemovalService>();
 #endregion
 
 builder.Services.AddCors(options =>

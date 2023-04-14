@@ -1,5 +1,4 @@
-﻿using api.Entities.UserNS;
-using api.Infrastructure.Exceptions;
+﻿using api.Infrastructure.Exceptions;
 using api.Infrastructure.Utils;
 using api.Repositories.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
