@@ -76,6 +76,9 @@ namespace api.Services.FileHierarchy
 			if (folder.UserId != userId)
 			{ throw new ApiException(ApiExceptionCode.AccessDenied); }
 
+			if (folder.IsRoot)
+			{ throw new ApiException(ApiExceptionCode.AccessDenied); }
+
 			await DeleteFolderWithoutDBSaving(folder);
 
 			await _UoW.FolderRepository.SaveAsync();
