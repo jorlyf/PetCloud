@@ -7,12 +7,14 @@ import { DropDownListElement } from "@components/DropDownList";
 import { setCuttedFile } from "@redux/slices/hieararchyCut";
 import { isAllowedToViewFileType } from "@modals/FileViewModal/useFileViewModal";
 import { NotificationService } from "@notification/NotificationService";
+import useConfirmDialog from "@hooks/useConfirmDialog";
 
 const useFileContextMenu = () => {
   const dispatch = useAppDispatch();
 
   const rootFolder = useAppSelector(state => state.hierarchy.rootFolder);
   const contextMenuSelectedFileId = useAppSelector(state => state.hierarchy.contextMenuSelectedFileId);
+  const confirmDelete = useConfirmDialog("Вы уверены, что хотите удалить файл безвозвратно?");
 
   const selectedFile = React.useMemo(() => {
     return findFileById(rootFolder, contextMenuSelectedFileId);
@@ -41,10 +43,14 @@ const useFileContextMenu = () => {
     dispatch(closeFileContextMenu());
   }
 
-  const handleDeleteFile = () => {
-    if (selectedFile !== null)
-      dispatch(deleteFile(selectedFile.id));
+  const handleDeleteFile = async () => {
+    const fileId = selectedFile?.id;
     dispatch(closeFileContextMenu());
+    if (fileId) {
+      if (await confirmDelete()) {
+        dispatch(deleteFile(fileId));
+      }
+    }
   }
 
   const menuItems: DropDownListElement[] = [

@@ -1,0 +1,23 @@
+.ConfirmDialog {
+  width: max-content;
+
+  padding: 20px;
+
+  background-color: var(--cloud-logo-color);
+  border          : 2px solid var(--dark-blue-color);
+
+  span {
+    font-size: 18px;
+  }
+
+  .Buttons {
+    display        : flex;
+    justify-content: end;
+
+    margin-top: 15px;
+
+    button {
+      margin-left: 20px;
+    }
+  }
+}

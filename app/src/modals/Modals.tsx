@@ -4,13 +4,15 @@ import CreateFolderModal from "./CreateFolderModal";
 import CreateFileModal from "./CreateFileModal";
 import FileViewModal from "./FileViewModal";
 import DownloadInfoModal from "./DownloadInfoModal";
+import ConfirmDialogsModal from "./ConfirmDialogsModal";
 
 const Modals: React.FC = () => {
   const {
     isOpenCreateFileModal,
     isOpenCreateFolderModal,
     isOpenFileViewModal,
-    isOpenDownloadInfoModal
+    isOpenDownloadInfoModal,
+    isOpenConfirmDialogsModal
   } = useModals();
 
   return (
@@ -19,6 +21,7 @@ const Modals: React.FC = () => {
       {isOpenCreateFolderModal && <CreateFolderModal />}
       {isOpenFileViewModal && <FileViewModal />}
       {isOpenDownloadInfoModal && <DownloadInfoModal />}
+      {isOpenConfirmDialogsModal && <ConfirmDialogsModal />}
     </>
   )
 }

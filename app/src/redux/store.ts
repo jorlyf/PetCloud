@@ -9,6 +9,7 @@ import openedFile from "./slices/openedFile";
 import fileUpload from "./slices/fileUpload";
 import hierarchyDownloader from "./slices/hierarchyDownloader";
 import hierarchyCut from "./slices/hieararchyCut";
+import confirmDialogs from "./slices/confirmDialogs";
 
 const store = configureStore({
   reducer: {
@@ -20,7 +21,8 @@ const store = configureStore({
     openedFile,
     fileUpload,
     hierarchyDownloader,
-    hierarchyCut
+    hierarchyCut,
+    confirmDialogs
   }
 });
 
